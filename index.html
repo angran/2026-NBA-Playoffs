@@ -141,11 +141,14 @@
   @media (max-width: 768px) {
     .bracket-grid { grid-template-columns: 1fr; }
     .bracket-wrap { overflow-x: scroll; }
-    table.series { table-layout: auto; font-size: 12px; }
-    table.series td, table.series th { padding: 4px 5px; }
+    table.series { table-layout: auto; font-size: 11px; }
+    table.series col.c-game, table.series col.c-time, table.series col.c-home, table.series col.c-note, table.series col.c-stars { width: auto; }
+    table.series td, table.series th { padding: 3px 4px; white-space: normal; }
+    table.series td:nth-child(1) { white-space: nowrap; }
+    table.series td:nth-child(3) { font-size: 11px; white-space: normal; }
     table.series .stars { font-size: 10px; }
-    table.series td:nth-child(3) { font-size: 11px; }
     .series-header { font-size: 13px; flex-wrap: wrap; }
+    .container { padding: 10px; }
   }
 </style>
 </head>
