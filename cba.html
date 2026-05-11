@@ -72,8 +72,13 @@
   table.series tr:nth-child(even) { background: #f5f5f5; }
   table.series tr.game-done { background: #e8f5e9; }
   table.series tr.game-done:nth-child(even) { background: #c8e6c9; }
-  .series-header { display: flex; align-items: center; gap: 8px; margin: 14px 0 6px; padding: 8px 12px; border-radius: 6px; font-weight: 700; font-size: 15px; background: #fff3e0; color: #bf360c; }
+  .series-header { display: flex; align-items: center; gap: 8px; margin: 14px 0 6px; padding: 8px 12px; border-radius: 6px; font-weight: 700; font-size: 15px; }
+  .series-header.qf { background: #fff3e0; color: #bf360c; }
+  .series-header.r1 { background: #e8eaf6; color: #283593; }
   .series-header img { width: 28px; height: 28px; }
+  table.series.r1-table th { background: #3949ab; }
+  table.series.r1-table tr.game-done { background: #e8eaf6; }
+  table.series.r1-table tr.game-done:nth-child(even) { background: #c5cae9; }
   .if-needed { font-size: 11px; color: #999; font-weight: normal; }
 
   @media (max-width: 768px) {
@@ -245,7 +250,7 @@
 <!-- ========== 8进4 ========== -->
 <h2 id="qf">8进4 赛程 (三场两胜, 进行中)</h2>
 
-<div class="series-header">
+<div class="series-header qf">
   <img src="https://file.qiumiwu.com/team/202107/06/74470bd1.png">
   (1) 上海久事 vs
   <img src="https://file.qiumiwu.com/team/202107/06/29130_300.png">
@@ -258,7 +263,7 @@
   <tr class="game-done"><td>G2</td><td>5月9日</td><td>山东</td><td>上海胜(2-0晋级)</td><td class="stars"><b>上海</b> 客场关门晋级四强</td></tr>
 </table>
 
-<div class="series-header">
+<div class="series-header qf">
   <img src="https://file.qiumiwu.com/team/202107/06/73081b02.png">
   (2) 浙江广厦 vs
   <img src="https://file.qiumiwu.com/team/202107/06/17df35ad.png">
@@ -272,7 +277,7 @@
   <tr><td>G3</td><td>待定</td><td>广厦</td><td class="if-needed">如有必要</td><td></td></tr>
 </table>
 
-<div class="series-header">
+<div class="series-header qf">
   <img src="https://file.qiumiwu.com/team/202107/06/119.png">
   (3) 深圳马可波罗 vs
   <img src="https://file.qiumiwu.com/team/202107/06/6529fb34.png">
@@ -286,7 +291,7 @@
   <tr><td>G3</td><td>待定</td><td>深圳</td><td class="if-needed">如有必要</td><td></td></tr>
 </table>
 
-<div class="series-header">
+<div class="series-header qf">
   <img src="https://file.qiumiwu.com/team/202107/06/de8d27ff.png">
   (4) 北京首钢 vs
   <img src="https://file.qiumiwu.com/team/202107/06/6bc3ee1a.png">
@@ -301,15 +306,15 @@
 </table>
 
 <!-- ========== 12进8 ========== -->
-<h2 id="r1">12进8 赛程 (三场两胜, 已结束)</h2>
+<h2 id="r1" style="border-color:#3949ab;color:#283593;">12进8 赛程 (三场两胜, 已结束)</h2>
 
-<div class="series-header">
+<div class="series-header r1">
   <img src="https://file.qiumiwu.com/team/202107/06/6bc3ee1a.png">
   (5) 广东 vs
   <img src="https://file.qiumiwu.com/team/202107/06/c04f686a.png">
   (12) 广州 &mdash; 广东 2-1 晋级
 </div>
-<table class="series">
+<table class="series r1-table">
   <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
   <tr><th>场次</th><th>时间</th><th>主场</th><th>比分</th><th>球星表现</th></tr>
   <tr class="game-done"><td>G1</td><td>4月28日</td><td>广东</td><td>广州 93 - 广东 76</td><td class="stars"><b>广州</b> 客场爆冷大胜!</td></tr>
@@ -317,39 +322,39 @@
   <tr class="game-done"><td>G3</td><td>5月3日</td><td>广东</td><td>广东胜(2-1晋级)</td><td class="stars"><b>广东</b> 主场关门晋级</td></tr>
 </table>
 
-<div class="series-header">
+<div class="series-header r1">
   <img src="https://file.qiumiwu.com/team/202107/06/6529fb34.png">
   (6) 浙江稠州 vs
   <img src="https://file.qiumiwu.com/team/202107/06/100074683_300.png">
   (11) 宁波 &mdash; 浙江 2-0 晋级
 </div>
-<table class="series">
+<table class="series r1-table">
   <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
   <tr><th>场次</th><th>时间</th><th>主场</th><th>比分</th><th>球星表现</th></tr>
   <tr class="game-done"><td>G1</td><td>4月28日</td><td>浙江</td><td>浙江 65 - 宁波 57</td><td class="stars"><b>浙江</b> 主场取胜</td></tr>
   <tr class="game-done"><td>G2</td><td>5月1日</td><td>宁波</td><td>浙江 83 - 宁波 81(加时)</td><td class="stars"><b>浙江</b> 程帅澎领衔 加时客场险胜 2-0晋级</td></tr>
 </table>
 
-<div class="series-header">
+<div class="series-header r1">
   <img src="https://file.qiumiwu.com/team/202107/06/17df35ad.png">
   (10) 山西 vs
   <img src="https://file.qiumiwu.com/team/202107/06/29135_300.png">
   (7) 青岛 &mdash; 山西 2-0 晋级 (爆冷)
 </div>
-<table class="series">
+<table class="series r1-table">
   <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
   <tr><th>场次</th><th>时间</th><th>主场</th><th>比分</th><th>球星表现</th></tr>
   <tr class="game-done"><td>G1</td><td>4月28日</td><td>青岛</td><td>山西 90 - 青岛 86(加时)</td><td class="stars"><b>山西</b> 客场加时4分险胜!</td></tr>
   <tr class="game-done"><td>G2</td><td>5月1日</td><td>山西</td><td>山西胜(2-0晋级)</td><td class="stars"><b>山西</b> 主场关门 10种子淘汰7种子</td></tr>
 </table>
 
-<div class="series-header">
+<div class="series-header r1">
   <img src="https://file.qiumiwu.com/team/202107/06/29130_300.png">
   (8) 山东 vs
   <img src="https://file.qiumiwu.com/team/202107/06/fc07b2a0.png">
   (9) 辽宁 &mdash; 山东 2-1 晋级
 </div>
-<table class="series">
+<table class="series r1-table">
   <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
   <tr><th>场次</th><th>时间</th><th>主场</th><th>比分</th><th>球星表现</th></tr>
   <tr class="game-done"><td>G1</td><td>4月28日</td><td>山东</td><td>山东胜</td><td class="stars"><b>山东</b> 主场取胜</td></tr>
