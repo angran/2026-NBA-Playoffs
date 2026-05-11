@@ -16,13 +16,63 @@
   .subtitle a { color: #e65100; text-decoration: none; }
   .subtitle a:hover { text-decoration: underline; }
   .format-note { text-align: center; background: #fff3e0; border-radius: 6px; padding: 8px 14px; font-size: 13px; color: #e65100; margin-bottom: 18px; }
+  .note { font-size: 12px; color: #888; margin-top: 4px; }
 
-  /* Standings Tables */
+  /* ========== CSS BRACKET ========== */
+  .bracket-container { overflow-x: auto; padding: 10px 0 20px; }
+  .bracket-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 12px;
+    min-width: 860px;
+    padding: 0 4px;
+  }
+  .bracket-col { display: flex; flex-direction: column; gap: 10px; }
+  .bracket-col-header {
+    text-align: center; font-size: 13px; font-weight: 700; color: #e65100;
+    background: #fff3e0; border-radius: 6px; padding: 6px 8px; margin-bottom: 2px;
+  }
+  .bracket-card {
+    border: 2px solid #ccc; border-radius: 8px; background: #fff;
+    overflow: hidden; font-size: 13px;
+  }
+  .bracket-card .card-header {
+    background: #f5f5f5; text-align: center; font-size: 11px; font-weight: 700;
+    color: #666; padding: 4px 6px; border-bottom: 1px solid #e0e0e0;
+  }
+  .bracket-card .team-row {
+    display: flex; align-items: center; padding: 6px 10px;
+    border-bottom: 1px solid #f0f0f0; font-weight: 600;
+  }
+  .bracket-card .team-row:last-child { border-bottom: none; }
+  .bracket-card .team-row .seed-num { color: #999; font-size: 11px; margin-right: 6px; min-width: 22px; }
+  .bracket-card .team-row .team-name { flex: 1; }
+  .bracket-card .team-row .team-score { color: #e65100; font-weight: 700; font-size: 14px; min-width: 16px; text-align: right; }
+  .bracket-card .team-row.winner { background: #fff8e1; }
+  .bracket-card .team-row.tbd { color: #bbb; font-style: italic; font-weight: 400; }
+
+  /* Card states */
+  .bracket-card.done { border-color: #f9a825; background: #fffde7; }
+  .bracket-card.done .card-header { background: #ffe082; color: #e65100; }
+  .bracket-card.active { border-color: #e65100; border-width: 2.5px; }
+  .bracket-card.active .card-header { background: #fff3e0; color: #e65100; }
+  .bracket-card.final-card { border-color: #d50000; border-width: 2.5px; }
+  .bracket-card.final-card .card-header { background: linear-gradient(135deg,#ff6f00,#e65100); color: #fff; }
+  .bracket-card.future { border-color: #ddd; border-style: dashed; }
+  .bracket-card.future .card-header { background: #fafafa; color: #aaa; }
+  .bracket-card.future .team-row { color: #bbb; font-weight: 400; }
+
+  /* Connector lines via pseudo-elements on col */
+  .bracket-spacer { flex: 1; min-height: 6px; }
+
+  .bk-legend { font-size: 12px; color: #888; text-align: center; margin-top: 10px; line-height: 2; }
+  .bk-legend span { display: inline-block; padding: 1px 6px; border-radius: 3px; margin: 0 4px; }
+
+  /* ========== STANDINGS ========== */
   table.standings { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 14px; }
   table.standings th { background: #e65100; color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; }
   table.standings td { padding: 7px 10px; border-bottom: 1px solid #ddd; vertical-align: middle; }
   table.standings tr:nth-child(even) { background: #fff8f0; }
-  table.standings tr.playoff { background: #fff; }
   table.standings tr.bye { background: #e8f5e9; }
   table.standings tr.bye:nth-child(even) { background: #c8e6c9; }
   table.standings tr.first-round { background: #fff3e0; }
@@ -31,7 +81,6 @@
   .seed { font-weight: bold; text-align: center; width: 40px; }
   .team { font-weight: 600; white-space: nowrap; }
   .record { text-align: center; }
-  .note { font-size: 12px; color: #888; margin-top: 4px; }
 
   .legend { display: flex; gap: 20px; margin: 10px 0; font-size: 13px; flex-wrap: wrap; }
   .legend-item { display: flex; align-items: center; gap: 6px; }
@@ -40,7 +89,7 @@
   .legend-r1 { background: #fff3e0; border: 1px solid #ffcc80; }
   .legend-out { background: #f5f5f5; border: 1px solid #ddd; }
 
-  /* Series schedule table */
+  /* ========== SERIES TABLES ========== */
   table.series { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 13px; table-layout: fixed; }
   table.series th { background: #bf360c; color: #fff; padding: 6px 8px; text-align: left; font-weight: 600; font-size: 13px; }
   table.series td { padding: 5px 8px; border-bottom: 1px solid #e0e0e0; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; }
@@ -60,37 +109,6 @@
   .series-header.cba-bg { background: #fff3e0; color: #bf360c; }
   .if-needed { font-size: 11px; color: #999; font-weight: normal; }
 
-  /* ========== BRACKET EMBED ========== */
-  .bracket-wrap {
-    overflow-x: auto; padding: 20px 0;
-  }
-  .bracket-wrap .bracket-row {
-    display: inline-flex; margin: 0 auto; min-width: 820px;
-  }
-  .bracket-wrap .c {
-    position: absolute; width: 100px;
-    border: 1.5px solid #ccc; border-radius: 3px; background: #fff;
-    overflow: hidden; white-space: nowrap; font-size: 9px;
-  }
-  .bracket-wrap .c .hd { background: #eee; font-size: 7.5px; color: #666; text-align: center; padding: 1.5px 2px; font-weight: 700; line-height: 1.2; }
-  .bracket-wrap .c .t { display: flex; align-items: center; padding: 2px 3px; font-weight: 600; border-bottom: 1px solid #f0f0f0; line-height: 1.4; }
-  .bracket-wrap .c .t:last-child { border-bottom: none; }
-  .bracket-wrap .c .t .s { color: #999; font-size: 7.5px; margin-right: 3px; min-width: 12px; }
-  .bracket-wrap .c .t .n { flex: 1; }
-  .bracket-wrap .c .t.w { background: #fff8e1; }
-  .bracket-wrap .c .t.tbd { color: #bbb; font-style: italic; font-weight: 400; }
-  .bracket-wrap .c.ok { background: #fff8e1; border-color: #f9a825; border-style: solid; }
-  .bracket-wrap .c.ok .hd { background: #ffe082; color: #e65100; }
-  .bracket-wrap .c.active { border-color: #e65100; border-width: 2px; }
-  .bracket-wrap .c.active .hd { background: #fff3e0; color: #e65100; }
-  .bracket-wrap .c.final { border-color: #d50000; border-width: 2.5px; }
-  .bracket-wrap .c.final .hd { background: linear-gradient(135deg,#ff6f00,#e65100); color: #fff; }
-  .bracket-wrap .col-label {
-    position: absolute; top: -14px; width: 100px; text-align: center;
-    font-size: 7.5px; font-weight: 700; color: #e65100;
-  }
-  .bracket-wrap .bk-legend { font-size: 8px; color: #999; text-align: center; margin-top: 6px; line-height: 1.6; width: 100%; }
-
   .back-link { text-align: center; margin: 20px 0 10px; }
   .back-link a { color: #1565c0; text-decoration: none; font-size: 14px; padding: 6px 16px; border: 1px solid #1565c0; border-radius: 4px; }
   .back-link a:hover { background: #e3f2fd; }
@@ -98,12 +116,12 @@
   @media print {
     body { padding: 0; font-size: 12px; background: #fff; }
     .container { padding: 0; }
-    .bracket-wrap { overflow: visible; }
+    .bracket-container { overflow: visible; }
     table.series { break-inside: avoid; }
     .series-header { break-inside: avoid; break-after: avoid; }
   }
   @media (max-width: 768px) {
-    .bracket-wrap { overflow-x: scroll; }
+    .bracket-container { overflow-x: scroll; -webkit-overflow-scrolling: touch; }
     table.series { table-layout: auto; font-size: 11px; }
     table.series col.c-game, table.series col.c-time, table.series col.c-home, table.series col.c-note, table.series col.c-stars { width: auto; }
     table.series td, table.series th { padding: 3px 4px; white-space: normal; }
@@ -123,8 +141,9 @@
 <p class="subtitle">
   <a href="#bracket">完整对阵图</a> |
   <a href="#standings">常规赛排名</a> |
+  <a href="#r8to4">8进4赛程</a> |
   <a href="#r12to8">12进8赛程</a> |
-  <a href="#r8to4">8进4赛程</a>
+  <a href="index.html">NBA 季后赛 &rarr;</a>
   &mdash; 更新于 2026年5月11日
 </p>
 <div class="format-note">
@@ -136,121 +155,111 @@
 <!-- ==================== VISUAL BRACKET ==================== -->
 <h2 id="bracket">一、季后赛完整对阵图</h2>
 
-<div class="bracket-wrap">
-<div class="bracket-row">
+<div class="bracket-container">
+<div class="bracket-grid">
 
-<div style="position:relative;flex-shrink:0;width:820px;height:320px;">
+  <!-- ===== COLUMN 1: 12进8 (Bo3) ===== -->
+  <div class="bracket-col">
+    <div class="bracket-col-header">12进8 (Bo3)</div>
 
-  <!-- Column labels -->
-  <div class="col-label" style="left:0;">12进8 (Bo3)</div>
-  <div class="col-label" style="left:180px;">8进4 (Bo3)</div>
-  <div class="col-label" style="left:390px;">半决赛 (Bo5)</div>
-  <div class="col-label" style="left:600px;">总决赛 (Bo7)</div>
+    <div class="bracket-card done">
+      <div class="card-header">广东 2-1 广州 ✓</div>
+      <div class="team-row winner"><span class="seed-num">(5)</span><span class="team-name">广东东阳光</span><span class="team-score">2</span></div>
+      <div class="team-row"><span class="seed-num">(12)</span><span class="team-name">广州龙狮</span><span class="team-score">1</span></div>
+    </div>
 
-  <svg style="position:absolute;top:0;left:0;width:820px;height:320px;" fill="none" stroke-linejoin="round" stroke-linecap="round">
-    <!-- 12进8 → 8进4 connectors -->
-    <!-- Match A (5v12) → QF (1 vs winner) -->
-    <polyline points="100,30 140,30 140,30 180,30" stroke="#e65100" stroke-width="1" stroke-dasharray="3,2"/>
-    <!-- Match B (6v11) → QF (2 vs winner) -->
-    <polyline points="100,100 140,100 140,100 180,100" stroke="#e65100" stroke-width="1" stroke-dasharray="3,2"/>
-    <!-- Match C (7v10) → QF (3 vs winner) -->
-    <polyline points="100,170 140,170 140,170 180,170" stroke="#e65100" stroke-width="1" stroke-dasharray="3,2"/>
-    <!-- Match D (8v9) → QF (4 vs winner) -->
-    <polyline points="100,240 140,240 140,240 180,240" stroke="#e65100" stroke-width="1" stroke-dasharray="3,2"/>
+    <div class="bracket-card done">
+      <div class="card-header">浙江稠州 2-0 宁波 ✓</div>
+      <div class="team-row winner"><span class="seed-num">(6)</span><span class="team-name">浙江稠州</span><span class="team-score">2</span></div>
+      <div class="team-row"><span class="seed-num">(11)</span><span class="team-name">宁波町渥</span><span class="team-score">0</span></div>
+    </div>
 
-    <!-- 8进4 → 半决赛 connectors -->
-    <polyline points="280,30 340,30 340,65 390,65" stroke="#bf360c" stroke-width="1.5"/>
-    <polyline points="280,100 340,100 340,65" stroke="#bf360c" stroke-width="1.5"/>
-    <polyline points="280,170 340,170 340,205 390,205" stroke="#bf360c" stroke-width="1.5"/>
-    <polyline points="280,240 340,240 340,205" stroke="#bf360c" stroke-width="1.5"/>
+    <div class="bracket-card done">
+      <div class="card-header">山西 2-0 青岛 ✓ 爆冷</div>
+      <div class="team-row"><span class="seed-num">(7)</span><span class="team-name">青岛国信</span><span class="team-score">0</span></div>
+      <div class="team-row winner"><span class="seed-num">(10)</span><span class="team-name">山西汾酒</span><span class="team-score">2</span></div>
+    </div>
 
-    <!-- 半决赛 → 总决赛 connectors -->
-    <polyline points="490,65 545,65 545,135 600,135" stroke="#d50000" stroke-width="1.5"/>
-    <polyline points="490,205 545,205 545,135" stroke="#d50000" stroke-width="1.5"/>
-  </svg>
-
-  <!-- ===== 12进8 (4 matchups) ===== -->
-  <!-- (5) 广东 vs (12) 广州 -->
-  <div class="c ok" style="left:0;top:7px;">
-    <div class="hd">广东 2-1 广州 ✓</div>
-    <div class="t w"><span class="s">(5)</span><span class="n">广东东阳光</span></div>
-    <div class="t"><span class="s">(12)</span><span class="n">广州龙狮</span></div>
-  </div>
-  <!-- (6) 浙江稠州 vs (11) 宁波 -->
-  <div class="c ok" style="left:0;top:77px;">
-    <div class="hd">浙江稠州 2-0 宁波 ✓</div>
-    <div class="t w"><span class="s">(6)</span><span class="n">浙江稠州</span></div>
-    <div class="t"><span class="s">(11)</span><span class="n">宁波町渥</span></div>
-  </div>
-  <!-- (7) 青岛 vs (10) 山西 -->
-  <div class="c ok" style="left:0;top:147px;">
-    <div class="hd">山西 2-0 青岛 ✓</div>
-    <div class="t"><span class="s">(7)</span><span class="n">青岛国信</span></div>
-    <div class="t w"><span class="s">(10)</span><span class="n">山西汾酒</span></div>
-  </div>
-  <!-- (8) 山东 vs (9) 辽宁 -->
-  <div class="c ok" style="left:0;top:217px;">
-    <div class="hd">山东 2-1 辽宁 ✓</div>
-    <div class="t w"><span class="s">(8)</span><span class="n">山东高速</span></div>
-    <div class="t"><span class="s">(9)</span><span class="n">辽宁本钢</span></div>
+    <div class="bracket-card done">
+      <div class="card-header">山东 2-1 辽宁 ✓</div>
+      <div class="team-row winner"><span class="seed-num">(8)</span><span class="team-name">山东高速</span><span class="team-score">2</span></div>
+      <div class="team-row"><span class="seed-num">(9)</span><span class="team-name">辽宁本钢</span><span class="team-score">1</span></div>
+    </div>
   </div>
 
-  <!-- ===== 8进4 (4 matchups, top 4 seeds enter here) ===== -->
-  <!-- (1) 上海 vs 山东 -->
-  <div class="c active" style="left:180px;top:7px;">
-    <div class="hd">(1) 上海 vs 山东 进行中</div>
-    <div class="t"><span class="s">(1)</span><span class="n">上海久事</span></div>
-    <div class="t"><span class="s">(8)</span><span class="n">山东高速</span></div>
-  </div>
-  <!-- (2) 广厦 vs 山西 -->
-  <div class="c active" style="left:180px;top:77px;">
-    <div class="hd">(2) 广厦 vs 山西 进行中</div>
-    <div class="t"><span class="s">(2)</span><span class="n">浙江广厦</span></div>
-    <div class="t"><span class="s">(10)</span><span class="n">山西汾酒</span></div>
-  </div>
-  <!-- (3) 深圳 vs 浙江稠州 -->
-  <div class="c active" style="left:180px;top:147px;">
-    <div class="hd">(3) 深圳 vs 稠州 进行中</div>
-    <div class="t"><span class="s">(3)</span><span class="n">深圳马可波罗</span></div>
-    <div class="t"><span class="s">(6)</span><span class="n">浙江稠州</span></div>
-  </div>
-  <!-- (4) 北京 vs 广东 -->
-  <div class="c active" style="left:180px;top:217px;">
-    <div class="hd">(4) 北京 vs 广东 进行中</div>
-    <div class="t"><span class="s">(4)</span><span class="n">北京首钢</span></div>
-    <div class="t"><span class="s">(5)</span><span class="n">广东东阳光</span></div>
+  <!-- ===== COLUMN 2: 8进4 (Bo3) ===== -->
+  <div class="bracket-col">
+    <div class="bracket-col-header">8进4 (Bo3)</div>
+
+    <div class="bracket-card done">
+      <div class="card-header">上海 2-0 山东 ✓</div>
+      <div class="team-row winner"><span class="seed-num">(1)</span><span class="team-name">上海久事</span><span class="team-score">2</span></div>
+      <div class="team-row"><span class="seed-num">(8)</span><span class="team-name">山东高速</span><span class="team-score">0</span></div>
+    </div>
+
+    <div class="bracket-card active">
+      <div class="card-header">山西 1-0 广厦 (进行中)</div>
+      <div class="team-row"><span class="seed-num">(2)</span><span class="team-name">浙江广厦</span><span class="team-score">0</span></div>
+      <div class="team-row winner"><span class="seed-num">(10)</span><span class="team-name">山西汾酒</span><span class="team-score">1</span></div>
+    </div>
+
+    <div class="bracket-card active">
+      <div class="card-header">深圳 1-0 稠州 (进行中)</div>
+      <div class="team-row winner"><span class="seed-num">(3)</span><span class="team-name">深圳马可波罗</span><span class="team-score">1</span></div>
+      <div class="team-row"><span class="seed-num">(6)</span><span class="team-name">浙江稠州</span><span class="team-score">0</span></div>
+    </div>
+
+    <div class="bracket-card active">
+      <div class="card-header">北京 1-0 广东 (进行中)</div>
+      <div class="team-row winner"><span class="seed-num">(4)</span><span class="team-name">北京首钢</span><span class="team-score">1</span></div>
+      <div class="team-row"><span class="seed-num">(5)</span><span class="team-name">广东东阳光</span><span class="team-score">0</span></div>
+    </div>
   </div>
 
-  <!-- ===== 半决赛 ===== -->
-  <div class="c" style="left:390px;top:42px;">
-    <div class="hd">半决赛 A (Bo5)</div>
-    <div class="t tbd"><span class="n">8进4胜者</span></div>
-    <div class="t tbd"><span class="n">8进4胜者</span></div>
-  </div>
-  <div class="c" style="left:390px;top:182px;">
-    <div class="hd">半决赛 B (Bo5)</div>
-    <div class="t tbd"><span class="n">8进4胜者</span></div>
-    <div class="t tbd"><span class="n">8进4胜者</span></div>
+  <!-- ===== COLUMN 3: 半决赛 (Bo5) ===== -->
+  <div class="bracket-col">
+    <div class="bracket-col-header">半决赛 (Bo5)</div>
+
+    <div class="bracket-card future">
+      <div class="card-header">半决赛 A</div>
+      <div class="team-row"><span class="seed-num">(1)</span><span class="team-name">上海久事</span></div>
+      <div class="team-row tbd"><span class="seed-num"></span><span class="team-name">8进4胜者</span></div>
+    </div>
+
+    <div class="bracket-spacer"></div>
+
+    <div class="bracket-card future">
+      <div class="card-header">半决赛 B</div>
+      <div class="team-row tbd"><span class="seed-num"></span><span class="team-name">8进4胜者</span></div>
+      <div class="team-row tbd"><span class="seed-num"></span><span class="team-name">8进4胜者</span></div>
+    </div>
   </div>
 
-  <!-- ===== 总决赛 ===== -->
-  <div class="c final" style="left:600px;top:112px;">
-    <div class="hd">CBA 总决赛 (Bo7)</div>
-    <div class="t tbd"><span class="n">半决赛胜者</span></div>
-    <div class="t tbd"><span class="n">半决赛胜者</span></div>
+  <!-- ===== COLUMN 4: 总决赛 (Bo7) ===== -->
+  <div class="bracket-col" style="justify-content: center;">
+    <div class="bracket-col-header">总决赛 (Bo7)</div>
+
+    <div class="bracket-spacer"></div>
+
+    <div class="bracket-card final-card">
+      <div class="card-header">CBA 总决赛</div>
+      <div class="team-row tbd"><span class="seed-num"></span><span class="team-name">半决赛 A 胜者</span></div>
+      <div class="team-row tbd"><span class="seed-num"></span><span class="team-name">半决赛 B 胜者</span></div>
+    </div>
+
+    <div class="bracket-spacer"></div>
   </div>
 
-</div><!-- panel -->
-
-</div><!-- bracket-row -->
+</div><!-- bracket-grid -->
 
 <div class="bk-legend">
-  <span style="display:inline-block;border:2px solid #f9a825;background:#fff8e1;padding:0 4px;border-radius:2px;">金边</span> 已结束 &nbsp;
-  <span style="display:inline-block;border:2px solid #e65100;background:#fff;padding:0 4px;border-radius:2px;">橙边</span> 进行中 &nbsp;
-  <span style="display:inline-block;border:2px solid #d50000;background:#fff;padding:0 4px;border-radius:2px;">红边</span> 总决赛 &nbsp;|&nbsp;
-  赛制: 3-3-5-7 &nbsp;|&nbsp; 2026.05.11
+  <span style="border:2px solid #f9a825;background:#fffde7;">金边</span> 已结束 &nbsp;
+  <span style="border:2px solid #e65100;background:#fff3e0;">橙边</span> 进行中 &nbsp;
+  <span style="border:2px dashed #ddd;background:#fafafa;">虚线</span> 待定 &nbsp;
+  <span style="border:2px solid #d50000;background:#fff;">红边</span> 总决赛
+  &nbsp;|&nbsp; 赛制: 3-3-5-7 &nbsp;|&nbsp; 2026.05.11
 </div>
-</div><!-- bracket-wrap -->
+</div><!-- bracket-container -->
 
 <!-- ==================== STANDINGS ==================== -->
 <h2 id="standings">二、常规赛最终排名 (前12名晋级季后赛)</h2>
@@ -262,43 +271,96 @@
 
 <table class="standings">
   <tr><th class="seed">#</th><th>球队</th><th class="record">战绩</th><th>备注</th></tr>
-  <tr class="bye"><td class="seed">1</td><td class="team">上海久事</td><td class="record">38-4</td><td>常规赛冠军，首轮轮空</td></tr>
-  <tr class="bye"><td class="seed">2</td><td class="team">浙江广厦</td><td class="record">33-9</td><td>卫冕冠军，首轮轮空</td></tr>
-  <tr class="bye"><td class="seed">3</td><td class="team">深圳马可波罗</td><td class="record">30-12</td><td>首轮轮空</td></tr>
-  <tr class="bye"><td class="seed">4</td><td class="team">北京首钢</td><td class="record">~29-13</td><td>首轮轮空</td></tr>
-  <tr class="first-round"><td class="seed">5</td><td class="team">广东东阳光</td><td class="record">~27-15</td><td>12进8: 2-1 淘汰广州</td></tr>
-  <tr class="first-round"><td class="seed">6</td><td class="team">浙江稠州</td><td class="record">~26-16</td><td>12进8: 2-0 淘汰宁波</td></tr>
-  <tr class="first-round"><td class="seed">7</td><td class="team">青岛国信</td><td class="record">~25-17</td><td>12进8: 0-2 被山西淘汰</td></tr>
-  <tr class="first-round"><td class="seed">8</td><td class="team">山东高速</td><td class="record">~24-18</td><td>12进8: 2-1 淘汰辽宁</td></tr>
-  <tr class="first-round"><td class="seed">9</td><td class="team">辽宁本钢</td><td class="record">18-24</td><td>12进8: 1-2 被山东淘汰</td></tr>
-  <tr class="first-round"><td class="seed">10</td><td class="team">山西汾酒</td><td class="record">~20-22</td><td>12进8: 2-0 淘汰青岛 (黑马!)</td></tr>
-  <tr class="first-round"><td class="seed">11</td><td class="team">宁波町渥</td><td class="record">21-21</td><td>12进8: 0-2 被浙江稠州淘汰</td></tr>
-  <tr class="first-round"><td class="seed">12</td><td class="team">广州龙狮</td><td class="record">18-24</td><td>12进8: 1-2 被广东淘汰</td></tr>
+  <tr class="bye"><td class="seed">1</td><td class="team"><b>上海久事</b></td><td class="record">38-4</td><td>常规赛冠军，首轮轮空</td></tr>
+  <tr class="bye"><td class="seed">2</td><td class="team"><b>浙江广厦</b></td><td class="record">33-9</td><td>卫冕冠军，首轮轮空</td></tr>
+  <tr class="bye"><td class="seed">3</td><td class="team"><b>深圳马可波罗</b></td><td class="record">30-12</td><td>首轮轮空</td></tr>
+  <tr class="bye"><td class="seed">4</td><td class="team"><b>北京首钢</b></td><td class="record">29-13</td><td>首轮轮空</td></tr>
+  <tr class="first-round"><td class="seed">5</td><td class="team"><b>广东东阳光</b></td><td class="record">27-15</td><td>12进8: 2-1 淘汰广州</td></tr>
+  <tr class="first-round"><td class="seed">6</td><td class="team"><b>浙江稠州</b></td><td class="record">26-16</td><td>12进8: 2-0 淘汰宁波</td></tr>
+  <tr class="first-round"><td class="seed">7</td><td class="team"><b>青岛国信</b></td><td class="record">25-17</td><td>12进8: 0-2 被山西淘汰</td></tr>
+  <tr class="first-round"><td class="seed">8</td><td class="team"><b>山东高速</b></td><td class="record">24-18</td><td>12进8: 2-1 淘汰辽宁</td></tr>
+  <tr class="first-round"><td class="seed">9</td><td class="team"><b>辽宁本钢</b></td><td class="record">18-24</td><td>12进8: 1-2 被山东淘汰</td></tr>
+  <tr class="first-round"><td class="seed">10</td><td class="team"><b>山西汾酒</b></td><td class="record">20-22</td><td>12进8: 2-0 淘汰青岛 (黑马!)</td></tr>
+  <tr class="first-round"><td class="seed">11</td><td class="team"><b>宁波町渥</b></td><td class="record">21-21</td><td>12进8: 0-2 被浙江稠州淘汰</td></tr>
+  <tr class="first-round"><td class="seed">12</td><td class="team"><b>广州龙狮</b></td><td class="record">18-24</td><td>12进8: 1-2 被广东淘汰</td></tr>
 </table>
-<p class="note">* 带 ~ 号的战绩为近似数据，以 CBA 官方为准。常规赛共42轮。</p>
 
-<!-- ==================== 12进8 ==================== -->
-<h2 id="r12to8">三、12进8完整赛程 (三场两胜制)</h2>
+<!-- ==================== 8进4 ==================== -->
+<h2 id="r8to4">三、8进4完整赛程 (三场两胜制，5月6日开始)</h2>
 
 <p class="note" style="margin-bottom:14px;">
-  1-4号种子首轮轮空。5-12号种子交叉对阵，三场两胜，胜者晋级8强。
+  1-4号种子本轮加入。高种子拥有主场优势。
 </p>
 
-<!-- (5) 广东 vs (12) 广州 -->
+<!-- (1) 上海 vs 山东 — 上海 2-0 晋级 -->
 <div class="series-header cba-bg">
-  (5) 广东东阳光 vs (12) 广州龙狮 &mdash; 广东 2-1 晋级
+  (1) 上海久事 vs (8) 山东高速 &mdash; 上海 2-0 晋级 ✓
 </div>
 <table class="series">
   <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
   <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
-  <tr class="game-done"><td>Game 1</td><td>4月</td><td>广州(客场)</td><td>广州 93 - 广东 76</td><td class="stars">广州客场爆冷取胜</td></tr>
+  <tr class="game-done"><td>Game 1</td><td>5月6日</td><td>上海</td><td>上海 84 - 山东 79</td><td class="stars"><b>上海</b> 李弘权/李添荣领衔，主场5分取胜</td></tr>
+  <tr class="game-done"><td>Game 2</td><td>5月8日</td><td>山东</td><td>上海胜 (2-0晋级)</td><td class="stars"><b>上海</b> 客场关门，2-0横扫晋级半决赛</td></tr>
+</table>
+
+<!-- (2) 广厦 vs 山西 — 山西 1-0 -->
+<div class="series-header cba-bg">
+  (2) 浙江广厦 vs (10) 山西汾酒 &mdash; 山西 1-0 (进行中)
+</div>
+<table class="series">
+  <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
+  <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
+  <tr class="game-done"><td>Game 1</td><td>5月7日</td><td>广厦</td><td>山西 92 - 广厦 90</td><td class="stars"><b>山西</b> 客场绝杀! 黑马继续爆冷</td></tr>
+  <tr><td>Game 2</td><td>待定</td><td>山西</td><td></td><td class="stars">山西有望2-0淘汰卫冕冠军</td></tr>
+  <tr><td>Game 3</td><td>待定</td><td>广厦</td><td class="if-needed">如有必要</td><td></td></tr>
+</table>
+
+<!-- (3) 深圳 vs 浙江稠州 — 深圳 1-0 -->
+<div class="series-header cba-bg">
+  (3) 深圳马可波罗 vs (6) 浙江稠州 &mdash; 深圳 1-0 (进行中)
+</div>
+<table class="series">
+  <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
+  <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
+  <tr class="game-done"><td>Game 1</td><td>5月7日</td><td>深圳</td><td>深圳 108 - 浙江稠州 95</td><td class="stars"><b>贺希宁</b> 32分! 深圳主场大胜13分</td></tr>
+  <tr><td>Game 2</td><td>待定</td><td>浙江稠州</td><td></td><td class="stars">深圳有望2-0晋级</td></tr>
+  <tr><td>Game 3</td><td>待定</td><td>深圳</td><td class="if-needed">如有必要</td><td></td></tr>
+</table>
+
+<!-- (4) 北京 vs 广东 — 北京 1-0 -->
+<div class="series-header cba-bg">
+  (4) 北京首钢 vs (5) 广东东阳光 &mdash; 北京 1-0 (进行中)
+</div>
+<table class="series">
+  <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
+  <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
+  <tr class="game-done"><td>Game 1</td><td>5月6日</td><td>北京</td><td>北京 102 - 广东 94</td><td class="stars"><b>北京</b> 周琦/赵睿/麦基 主场8分取胜</td></tr>
+  <tr><td>Game 2</td><td>待定</td><td>广东</td><td></td><td class="stars">北京有望2-0晋级</td></tr>
+  <tr><td>Game 3</td><td>待定</td><td>北京</td><td class="if-needed">如有必要</td><td></td></tr>
+</table>
+
+<!-- ==================== 12进8 ==================== -->
+<h2 id="r12to8">四、12进8完整赛程 (三场两胜制，已全部结束)</h2>
+
+<p class="note" style="margin-bottom:14px;">
+  1-4号种子首轮轮空。5-12号种子交叉对阵，三场两胜，胜者晋级8强。全部系列赛已结束。
+</p>
+
+<!-- (5) 广东 vs (12) 广州 -->
+<div class="series-header cba-bg">
+  (5) 广东东阳光 vs (12) 广州龙狮 &mdash; 广东 2-1 晋级 ✓
+</div>
+<table class="series">
+  <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
+  <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
+  <tr class="game-done"><td>Game 1</td><td>4月</td><td>广州(客场)</td><td>广州 93 - 广东 76</td><td class="stars">广州主场爆冷取胜</td></tr>
   <tr class="game-done"><td>Game 2</td><td>4月</td><td>广东(主场)</td><td>广东胜</td><td class="stars"><b>广东</b> 主场扳平</td></tr>
-  <tr class="game-done"><td>Game 3</td><td>4月</td><td>广东(主场)</td><td>广东胜 (2-1)</td><td class="stars"><b>广东</b> 决胜场取胜晋级</td></tr>
+  <tr class="game-done"><td>Game 3</td><td>4月</td><td>广东(主场)</td><td>广东胜 (2-1晋级)</td><td class="stars"><b>广东</b> 决胜场取胜晋级</td></tr>
 </table>
 
 <!-- (6) 浙江稠州 vs (11) 宁波 -->
 <div class="series-header cba-bg">
-  (6) 浙江稠州 vs (11) 宁波町渥 &mdash; 浙江稠州 2-0 晋级
+  (6) 浙江稠州 vs (11) 宁波町渥 &mdash; 浙江稠州 2-0 晋级 ✓
 </div>
 <table class="series">
   <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
@@ -309,98 +371,43 @@
 
 <!-- (7) 青岛 vs (10) 山西 -->
 <div class="series-header cba-bg">
-  (7) 青岛国信 vs (10) 山西汾酒 &mdash; 山西 2-0 晋级 (黑马!)
+  (7) 青岛国信 vs (10) 山西汾酒 &mdash; 山西 2-0 晋级 ✓ (黑马!)
 </div>
 <table class="series">
   <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
   <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
   <tr class="game-done"><td>Game 1</td><td>4月</td><td>青岛</td><td>山西 90 - 青岛 86 (加时)</td><td class="stars"><b>山西</b> 客场加时取胜</td></tr>
-  <tr class="game-done"><td>Game 2</td><td>4月</td><td>山西</td><td>山西胜 (2-0)</td><td class="stars"><b>山西</b> 10种子爆冷横扫7种子!</td></tr>
+  <tr class="game-done"><td>Game 2</td><td>4月</td><td>山西</td><td>山西胜 (2-0横扫)</td><td class="stars"><b>山西</b> 10种子爆冷横扫7种子!</td></tr>
 </table>
 
 <!-- (8) 山东 vs (9) 辽宁 -->
 <div class="series-header cba-bg">
-  (8) 山东高速 vs (9) 辽宁本钢 &mdash; 山东 2-1 晋级
+  (8) 山东高速 vs (9) 辽宁本钢 &mdash; 山东 2-1 晋级 ✓
 </div>
 <table class="series">
   <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
   <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
   <tr class="game-done"><td>Game 1</td><td>4月</td><td>山东</td><td>--</td><td class="stars"></td></tr>
   <tr class="game-done"><td>Game 2</td><td>4月</td><td>辽宁</td><td>--</td><td class="stars"></td></tr>
-  <tr class="game-done"><td>Game 3</td><td>4月</td><td>山东</td><td>山东胜 (2-1)</td><td class="stars"><b>山东</b> 2-1淘汰辽宁 | <b>辽宁</b> 重建阵痛首轮出局</td></tr>
-</table>
-
-<!-- ==================== 8进4 ==================== -->
-<h2 id="r8to4">四、8进4完整赛程 (三场两胜制，5月6日开始)</h2>
-
-<p class="note" style="margin-bottom:14px;">
-  1-4号种子本轮加入。高种子拥有主场优势。
-</p>
-
-<!-- (1) 上海 vs 山东 -->
-<div class="series-header cba-bg">
-  (1) 上海久事 vs (8) 山东高速 &mdash; 上海 1-0 (进行中)
-</div>
-<table class="series">
-  <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
-  <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
-  <tr class="game-done"><td>Game 1</td><td>5月6日</td><td>上海</td><td>上海 84 - 山东 79</td><td class="stars"><b>上海</b> 李弘权/李添荣领衔 主场5分取胜</td></tr>
-  <tr><td>Game 2</td><td>待定</td><td>山东</td><td></td><td class="stars">上海有望2-0晋级</td></tr>
-  <tr><td>Game 3</td><td>待定</td><td>上海</td><td class="if-needed">如有必要</td><td></td></tr>
-</table>
-
-<!-- (2) 广厦 vs 山西 -->
-<div class="series-header cba-bg">
-  (2) 浙江广厦 vs (10) 山西汾酒 &mdash; 进行中
-</div>
-<table class="series">
-  <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
-  <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
-  <tr><td>Game 1</td><td>5月初</td><td>广厦</td><td></td><td class="stars"><b>广厦</b> 胡金秋/巴里·布朗 vs 黑马山西</td></tr>
-  <tr><td>Game 2</td><td>待定</td><td>山西</td><td></td><td></td></tr>
-  <tr><td>Game 3</td><td>待定</td><td>广厦</td><td class="if-needed">如有必要</td><td></td></tr>
-</table>
-
-<!-- (3) 深圳 vs 浙江稠州 -->
-<div class="series-header cba-bg">
-  (3) 深圳马可波罗 vs (6) 浙江稠州 &mdash; 进行中
-</div>
-<table class="series">
-  <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
-  <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
-  <tr><td>Game 1</td><td>5月初</td><td>深圳</td><td></td><td class="stars"><b>深圳</b> 贺希宁(场均20.1分)/特奎维恩·史密斯</td></tr>
-  <tr><td>Game 2</td><td>待定</td><td>浙江稠州</td><td></td><td></td></tr>
-  <tr><td>Game 3</td><td>待定</td><td>深圳</td><td class="if-needed">如有必要</td><td></td></tr>
-</table>
-
-<!-- (4) 北京 vs 广东 -->
-<div class="series-header cba-bg">
-  (4) 北京首钢 vs (5) 广东东阳光 &mdash; 北京 1-0 (进行中)
-</div>
-<table class="series">
-  <colgroup><col class="c-game"><col class="c-time"><col class="c-home"><col class="c-note"><col class="c-stars"></colgroup>
-  <tr><th>场次</th><th>时间</th><th>主场</th><th>比分/备注</th><th>球星表现</th></tr>
-  <tr class="game-done"><td>Game 1</td><td>5月6日</td><td>北京</td><td>北京 102 - 广东 94</td><td class="stars"><b>北京</b> 周琦/赵睿/麦基, 曾凡博伤愈归队</td></tr>
-  <tr><td>Game 2</td><td>待定</td><td>广东</td><td></td><td class="stars">北京有望2-0晋级</td></tr>
-  <tr><td>Game 3</td><td>待定</td><td>北京</td><td class="if-needed">如有必要</td><td></td></tr>
+  <tr class="game-done"><td>Game 3</td><td>4月</td><td>山东</td><td>山东胜 (2-1晋级)</td><td class="stars"><b>山东</b> 2-1淘汰辽宁 | <b>辽宁</b> 重建阵痛首轮出局</td></tr>
 </table>
 
 <!-- ==================== KEY DATES ==================== -->
 <div style="background:#fff3e0;border-radius:8px;padding:12px 16px;margin:20px 0;font-size:13px;">
   <strong>关键日期:</strong><br>
-  &bull; 12进8: 4月中下旬 (已结束)<br>
-  &bull; 8进4: 5月6日起 (进行中)<br>
+  &bull; 12进8: 4月中下旬 (已全部结束)<br>
+  &bull; 8进4: 5月6日起 (上海已晋级，其余3组进行中)<br>
   &bull; 半决赛: 五场三胜，待8进4结束后安排<br>
   &bull; 总决赛: 七场四胜，预计5月下旬-6月初
 </div>
 
 <div style="background:#f3e5f5;border-radius:8px;padding:12px 16px;margin:20px 0;font-size:13px;">
   <strong>本赛季看点:</strong><br>
-  &bull; <b>上海久事</b> 38胜4负常规赛称霸，李弘权/李添荣搭配强力外援<br>
-  &bull; <b>浙江广厦</b> 卫冕冠军，胡金秋+巴里·布朗(外援)组合<br>
-  &bull; <b>深圳马可波罗</b> 贺希宁场均20.1分，特奎维恩·史密斯(外援)实力强劲<br>
-  &bull; <b>北京首钢</b> 周琦+赵睿+麦基豪华阵容，曾凡博伤愈归队增添实力<br>
-  &bull; <b>山西汾酒</b> 10号种子爆冷横扫7号青岛，本赛季最大黑马<br>
+  &bull; <b>上海久事</b> 38胜4负常规赛称霸，8进4横扫山东率先晋级半决赛<br>
+  &bull; <b>山西汾酒</b> 10号种子连续爆冷: 横扫青岛后G1客场绝杀卫冕冠军广厦!<br>
+  &bull; <b>深圳马可波罗</b> 贺希宁G1砍32分大胜浙江稠州<br>
+  &bull; <b>北京首钢</b> 周琦+赵睿+麦基豪华阵容，G1主场8分取胜广东<br>
+  &bull; <b>浙江广厦</b> 卫冕冠军主场被山西绝杀，面临出局危机<br>
   &bull; <b>辽宁本钢</b> 重建阵痛，18胜24负首轮即遭淘汰
 </div>
 
