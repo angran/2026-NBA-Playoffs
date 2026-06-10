@@ -3,52 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2025-26 NBA 球队薪资 - 堆叠柱状图</title>
+<title>2025-26 NBA 球队薪资 - 堆叠条形图</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif; color: #1a1a2e; background: #f5f5f5; }
-  .container { max-width: 1280px; margin: 0 auto; background: #fff; padding: 20px; min-height: 100vh; }
-  h1 { text-align: center; font-size: 26px; margin-bottom: 6px; }
-  .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 16px; }
+  .container { max-width: 1180px; margin: 0 auto; background: #fff; padding: 20px; min-height: 100vh; }
+  h1 { text-align: center; font-size: 25px; margin-bottom: 6px; }
+  .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 14px; }
   .subtitle a { color: #1565c0; text-decoration: none; }
   .note-box { background: #e3f2fd; border-radius: 6px; padding: 8px 14px; font-size: 13px; color: #1565c0; margin-bottom: 14px; text-align: center; }
 
-  /* ===== Legend ===== */
-  .legend { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 10px 0 6px; font-size: 12.5px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 13px; justify-content: center; margin: 8px 0 4px; font-size: 12.5px; }
   .legend-item { display: flex; align-items: center; gap: 5px; }
   .legend-box { width: 14px; height: 14px; border-radius: 3px; }
-  .cap-legend { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 4px 0 14px; font-size: 12px; }
+  .cap-legend { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 4px 0 12px; font-size: 12px; }
   .cap-legend .ln { display: inline-block; width: 22px; height: 0; border-top-width: 2px; border-top-style: dashed; vertical-align: middle; }
 
-  /* ===== Chart ===== */
-  .chart-scroll { overflow-x: auto; overflow-y: hidden; padding: 6px 0 4px; border: 1px solid #eee; border-radius: 8px; }
-  .chart { position: relative; display: flex; align-items: flex-end; gap: 8px; padding: 0 14px 0 64px; width: max-content; }
-  .yaxis { position: absolute; left: 0; top: 0; }
-  .ytick { position: absolute; left: 0; width: 56px; text-align: right; font-size: 10px; color: #999; transform: translateY(-50%); }
-  .gridline { position: absolute; left: 60px; height: 0; border-top: 1px solid #f0f0f0; }
-  .capline { position: absolute; left: 60px; height: 0; border-top-width: 1.5px; border-top-style: dashed; z-index: 3; }
-  .caplabel { position: absolute; font-size: 9.5px; font-weight: 700; padding: 0 3px; border-radius: 2px; white-space: nowrap; transform: translateY(-50%); z-index: 4; }
+  /* ===== Chart (rotated: horizontal bars, vertical scroll) ===== */
+  .chart-scroll { max-height: 76vh; overflow-y: auto; overflow-x: hidden; border: 1px solid #eee; border-radius: 8px; }
+  .inner { position: relative; }
 
-  .col { position: relative; z-index: 2; display: flex; flex-direction: column-reverse; align-items: stretch; }
-  .seg { display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; color: #fff; line-height: 1.05; border-bottom: 1px solid rgba(255,255,255,0.55); cursor: default; }
-  .seg:first-child { border-bottom: none; } /* visual bottom (column-reverse) */
-  .seg .pn { font-size: 9.5px; font-weight: 700; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; padding: 0 1px; }
-  .seg .ps { font-size: 8.5px; opacity: 0.92; }
+  .axis { position: sticky; top: 0; z-index: 10; display: flex; align-items: flex-end; height: 38px; background: #fff; border-bottom: 1px solid #e8e8e8; }
+  .axis .spacer { width: 168px; flex-shrink: 0; font-size: 10px; color: #999; display: flex; align-items: flex-end; padding: 0 0 3px 8px; font-weight: 700; }
+  .axis .ticks { flex: 1; position: relative; height: 100%; }
+  .axis .tick { position: absolute; bottom: 3px; transform: translateX(-50%); font-size: 10px; color: #999; }
+  .axis .capl { position: absolute; top: 2px; transform: translateX(-50%); font-size: 9px; font-weight: 700; color: #fff; padding: 1px 4px; border-radius: 3px; white-space: nowrap; }
+
+  .vlines { position: absolute; left: 168px; right: 0; top: 38px; bottom: 0; pointer-events: none; z-index: 5; }
+  .vline { position: absolute; top: 0; bottom: 0; width: 0; }
+
+  .rows { position: relative; z-index: 1; }
+  .row { display: flex; align-items: stretch; height: 44px; border-bottom: 1px solid #f2f2f2; }
+  .row:hover { background: #fafbff; }
+  .row-label { width: 168px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 8px 0 4px; border-right: 1px solid #eee; }
+  .row-label .rk { width: 20px; text-align: right; color: #c0c0c8; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+  .row-label img { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+  .row-label .meta { display: flex; flex-direction: column; line-height: 1.12; overflow: hidden; }
+  .row-label .meta .tnm { font-size: 12.5px; font-weight: 800; white-space: nowrap; }
+  .row-label .meta .ttot { font-size: 10.5px; color: #555; font-weight: 600; }
+
+  .row-track { flex: 1; position: relative; }
+  .bar { position: absolute; left: 0; top: 4px; bottom: 4px; width: 100%; display: flex; }
+  .seg { height: 100%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; align-items: center;
+         overflow: hidden; color: #fff; border-right: 1px solid rgba(255,255,255,0.55); padding: 0 2px; cursor: default; }
+  .seg:last-child { border-right: none; }
+  .seg .pn { font-size: 9.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .seg .ps { font-size: 8px; opacity: 0.92; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
   .seg.other { color: #555; }
-  .seg.other .pn { font-weight: 600; }
-
-  .col-foot { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); width: 78px; text-align: center; padding-top: 5px; }
-  .col-foot img { width: 26px; height: 26px; object-fit: contain; }
-  .col-foot .tot { font-size: 10.5px; font-weight: 800; color: #1a1a2e; margin-top: 1px; }
-  .col-foot .nm { font-size: 9.5px; color: #888; white-space: nowrap; }
-  .col-foot .rk { font-size: 9px; color: #bbb; }
 
   .scroll-hint { text-align: center; font-size: 11px; color: #aaa; margin-top: 4px; }
-  .footer { text-align: center; color: #aaa; font-size: 11.5px; margin-top: 22px; border-top: 1px solid #eee; padding-top: 10px; line-height: 1.6; }
+  .footer { text-align: center; color: #aaa; font-size: 11.5px; margin-top: 18px; border-top: 1px solid #eee; padding-top: 10px; line-height: 1.6; }
 
   @media (max-width: 768px) {
     .container { padding: 10px; }
-    h1 { font-size: 20px; }
+    h1 { font-size: 19px; }
+    .axis .spacer, .row-label, .vlines { width: 120px; }
+    .vlines { left: 120px; }
+    .row-label .meta .tnm { font-size: 11px; }
   }
 </style>
 </head>
@@ -60,161 +71,155 @@
   <a href="index.html" style="font-weight:700;color:#444;">🏠 首页</a> &nbsp;|&nbsp;
   <a href="nba-playoffs.html">NBA 季后赛</a> &nbsp;|&nbsp;
   <a href="cba-playoffs.html">CBA 季后赛</a> &nbsp;|&nbsp;
-  堆叠柱状图 &middot; 按球队薪资总额从高到低排列
+  横向堆叠条形图 &middot; 按薪资总额从高到低
 </p>
 <div class="note-box">
-  每根柱子 = 一支球队的当年薪资总额；柱内按球员当年工资<strong>从高到低堆叠</strong>，仅标注薪资最高的 6 名球员，其余并入「其他球员」。横向虚线为联盟工资帽 / 奢侈税 / 土豪线参考。
+  每条横向柱 = 一支球队当年薪资总额；柱内按球员工资<strong>从高到低（左→右）堆叠</strong>，仅标注最高的 6 名球员。标签格式：<strong>#球衣号 姓名 (生涯单场最高分) &middot; 身高 &middot; 年薪</strong>。竖向虚线为工资帽 / 奢侈税 / 土豪线。<strong>上下滑动查看全部 30 队</strong>。
 </div>
 
 <div class="legend" id="legend"></div>
 <div class="cap-legend" id="capLegend"></div>
 
 <div class="chart-scroll">
-  <div class="chart" id="chart"></div>
+  <div class="inner" id="inner">
+    <div class="axis">
+      <div class="spacer">球队 / 总额</div>
+      <div class="ticks" id="ticks"></div>
+    </div>
+    <div class="vlines" id="vlines"></div>
+    <div class="rows" id="rows"></div>
+  </div>
 </div>
-<div class="scroll-hint">← 左右滑动查看全部 30 支球队 →</div>
+<div class="scroll-hint">↑ 上下滑动查看全部 30 支球队 ↓ &nbsp;(鼠标悬停看完整资料)</div>
 
 <div class="footer">
-  薪资数据来源：HoopsHype 2025-26 球队薪资表（当年工资，含交易截止日后阵容；含被裁球员的摊销死薪）。<br>
-  名次基于薪资总额，数值仅供参考，以官方 CBA 劳资协议口径为准。&mdash; 工资帽口径：联盟 2025-26 官方数字。
+  薪资来源：HoopsHype 2025-26（当年工资，含交易截止日后阵容及被裁球员摊销死薪）。球衣号 / 身高 / 生涯单场最高得分来自公开资料。<br>
+  标 * 者为新秀估计值；个别号码为避免同队重号已做微调。工资帽口径：2025-26 联盟官方。数值仅供参考。
 </div>
 
 </div><!-- container -->
 
 <script>
-// ===== 2025-26 NBA 薪资数据 (USD) =====
-// players: [中文名, 当年工资]，top6 按高到低；other = 其余球员合计
+// ===== 2025-26 NBA 薪资数据 =====
+// players: [中文名, 当年工资USD, 生涯单场最高分, 球衣号, 身高cm]，top6 高→低；other = 其余合计
 const TEAMS = [
-  {id:"1610612738", nm:"凯尔特人", total:190125013, players:[["塔图姆",54126450],["布朗",53142264],["怀特",28100000],["武切维奇",21481481],["豪泽",10044644],["普里查德",7232143]], other:15998031},
-  {id:"1610612751", nm:"篮网", total:152110823, players:[["小波特",38333050],["克拉克斯顿",25541760],["曼恩",15500000],["德明",6889200],["阿巴吉",6383525],["夏普",6250000]], other:53213288},
-  {id:"1610612752", nm:"尼克斯", total:211398842, players:[["唐斯",53142264],["阿奴诺比",39568966],["布伦森",34944001],["布里奇斯",24900000],["哈特",19472240],["罗宾逊",12954546]], other:26416825},
-  {id:"1610612755", nm:"76人", total:196905025, players:[["恩比德",55224526],["乔治",51666090],["马克西",37958760],["埃奇科姆",11108880],["格莱姆斯",8741209],["乌布雷",8382150]], other:23823410},
-  {id:"1610612761", nm:"猛龙", total:191608832, players:[["巴恩斯",38661700],["英格拉姆",38095238],["奎克利",32500000],["巴雷特",27705357],["珀尔特尔",19500000],["穆雷-博伊尔斯",6332520]], other:28814017},
-  {id:"1610612741", nm:"公牛", total:184495705, players:[["西蒙斯",27678571],["吉迪",25000000],["塞克斯顿",19175000],["科林斯",18080496],["P.威廉姆斯",18000000],["奥科罗",11000000]], other:65561638},
-  {id:"1610612739", nm:"骑士", total:217367467, players:[["米切尔",46394100],["莫布利",46394100],["哈登",39182693],["艾伦",20000000],["斯特鲁斯",15936452],["施罗德",14104000]], other:35356122},
-  {id:"1610612765", nm:"活塞", total:187970424, players:[["坎宁安",46394100],["哈里斯",26634146],["胡尔特",17991071],["D.罗宾逊",16834692],["斯图尔特",15000000],["勒韦尔",14104000]], other:51012415},
-  {id:"1610612754", nm:"步行者", total:188736250, players:[["西亚卡姆",45550512],["哈利伯顿",45550512],["祖巴茨",18102000],["内姆哈德",18102000],["托平",14000000],["内史密斯",11000000]], other:36431226},
-  {id:"1610612749", nm:"雄鹿", total:184666265, players:[["字母哥",54126450],["特纳",25318251],["库兹马",22560605],["利拉德(摊销)",22516603],["波蒂斯",13445754],["丁",6670882]], other:40027720},
-  {id:"1610612737", nm:"老鹰", total:187049086, players:[["麦科勒姆",30666666],["J.约翰逊",30000000],["库明加",22500000],["NAW",15161800],["奥孔古",15000000],["基斯珀特",13975000]], other:59745620},
-  {id:"1610612766", nm:"黄蜂", total:188049840, players:[["拉梅洛",37958760],["M.布里奇斯",25000000],["J.格林",13666667],["G.威廉姆斯",13645500],["科比·怀特",12888889],["米勒",11968400]], other:72921624},
-  {id:"1610612748", nm:"热火", total:188302902, players:[["阿德巴约",37096620],["希罗",31000000],["威金斯",28223215],["罗齐尔",26643031],["鲍威尔",20482758],["D.米切尔",11600000]], other:33257278},
-  {id:"1610612753", nm:"魔术", total:189903062, players:[["瓦格纳",38661700],["贝恩",36725670],["萨格斯",35000000],["班凯罗",15334769],["艾萨克",15000000],["卡特",10850000]], other:38330923},
-  {id:"1610612764", nm:"奇才", total:189949625, players:[["戴维斯",54126450],["特雷·杨",46394100],["斯马特",14786855],["萨尔",11808240],["T.约翰逊",8237640],["库利巴利",7275682]], other:47320658},
-  {id:"1610612760", nm:"雷霆", total:189104345, players:[["SGA",38333050],["哈滕斯坦",28500000],["卡鲁索",18102100],["多尔特",17222222],["霍姆格伦",13731368],["以赛亚·乔",12362338]], other:60853267},
-  {id:"1610612750", nm:"森林狼", total:198498074, players:[["爱德华兹",45550512],["戈贝尔",35000000],["兰德尔",30864198],["麦克丹尼尔斯",24393104],["里德",21551724],["迪文琴佐",11990000]], other:29148536},
-  {id:"1610612743", nm:"掘金", total:191600929, players:[["约基奇",55224526],["穆雷",46394100],["戈登",22841455],["C.约翰逊",21057065],["瓦兰丘纳斯",10395000],["纳吉",8177778]], other:27511005},
-  {id:"1610612762", nm:"爵士", total:175759008, players:[["马尔卡宁",46394100],["小贾伦",35000000],["努尔基奇",19375000],["克拉克森",10651561],["朗佐",10000000],["贝利",9069840]], other:45268507},
-  {id:"1610612757", nm:"开拓者", total:189204726, players:[["霍勒迪",32400000],["格兰特",32000001],["艾顿",25550814],["阿夫迪亚",14375000],["利拉德",14104000],["R.威廉姆斯",13285713]], other:57489198},
-  {id:"1610612742", nm:"独行侠", total:187339136, players:[["欧文",36566002],["米德尔顿",35086419],["汤普森",16666667],["加福德",14386320],["P.华盛顿",14152174],["弗拉格",13825920]], other:56655634},
-  {id:"1610612745", nm:"火箭", total:199783669, players:[["杜兰特",54708608],["申京",33944954],["范弗利特",25000000],["亚当斯",14130434],["芬尼-史密斯",12700000],["小史密斯",12350392]], other:46949281},
-  {id:"1610612763", nm:"灰熊", total:161144762, players:[["莫兰特",39446090],["KCP",21621500],["阿尔达马",18485916],["B.克拉克",12500000],["杰罗姆",8781000],["K.安德森",8300531]], other:52009725},
-  {id:"1610612740", nm:"鹈鹕", total:190898076, players:[["锡安",39446090],["普尔",31848215],["D.穆雷",30801103],["墨菲",25000000],["赫伯特·琼斯",13937574],["鲁尼",8000000]], other:41865094},
-  {id:"1610612759", nm:"马刺", total:188455363, players:[["福克斯",37096620],["瓦塞尔",27500000],["巴恩斯",19000000],["K.约翰逊",18000000],["奥利尼克",13445122],["文班亚马",13376695]], other:60036926},
-  {id:"1610612744", nm:"勇士", total:208824825, players:[["库里",59606817],["巴特勒",54126450],["波尔津吉斯",30731707],["格林",25892857],["穆迪",11574075],["霍福德",5685000]], other:21207919},
-  {id:"1610612746", nm:"快船", total:191938984, players:[["伦纳德",50000000],["加兰",39446090],["科林斯",26580000],["波格丹",16020000],["小琼斯",10000000],["马图林",9187573]], other:40705321},
-  {id:"1610612747", nm:"湖人", total:197146448, players:[["詹姆斯",52627153],["东契奇",45999660],["八村垒",18259259],["里夫斯",13937574],["范德比尔特",11571429],["肯纳德",11000000]], other:43751373},
-  {id:"1610612756", nm:"太阳", total:190450636, players:[["布克",53142264],["杰伦·格林",33333333],["布鲁克斯",22124110],["比尔",19383010],["G.艾伦",16875000],["奥尼尔",10125000]], other:35467919},
-  {id:"1610612758", nm:"国王", total:193326868, players:[["拉文",47499660],["萨博尼斯",42336000],["德罗赞",24570000],["亨特",23303571],["蒙克",18797619],["K.穆雷",11144093]], other:25675925},
+  {id:"1610612738", nm:"凯尔特人", total:190125013, players:[["塔图姆",54126450,60,"0",203],["布朗",53142264,50,"7",198],["怀特",28100000,41,"9",193],["武切维奇",21481481,51,"34",208],["豪泽",10044644,30,"30",201],["普里查德",7232143,43,"11",185]], other:15998031},
+  {id:"1610612751", nm:"篮网", total:152110823, players:[["小波特",38333050,39,"1",208],["克拉克斯顿",25541760,25,"33",211],["曼恩",15500000,39,"14",196],["德明",6889200,"22*","8",201],["阿巴吉",6383525,28,"30",196],["夏普",6250000,24,"20",208]], other:53213288},
+  {id:"1610612752", nm:"尼克斯", total:211398842, players:[["唐斯",53142264,62,"32",213],["阿奴诺比",39568966,40,"8",201],["布伦森",34944001,61,"11",188],["布里奇斯",24900000,42,"25",198],["哈特",19472240,34,"3",191],["罗宾逊",12954546,22,"23",213]], other:26416825},
+  {id:"1610612755", nm:"76人", total:196905025, players:[["恩比德",55224526,70,"21",213],["乔治",51666090,47,"8",203],["马克西",37958760,52,"0",188],["埃奇科姆",11108880,"34*","77",193],["格莱姆斯",8741209,46,"5",196],["乌布雷",8382150,40,"9",198]], other:23823410},
+  {id:"1610612761", nm:"猛龙", total:191608832, players:[["巴恩斯",38661700,41,"4",203],["英格拉姆",38095238,49,"3",203],["奎克利",32500000,39,"5",191],["巴雷特",27705357,44,"9",198],["珀尔特尔",19500000,35,"19",216],["穆雷-博伊尔斯",6332520,"20*","21",201]], other:28814017},
+  {id:"1610612741", nm:"公牛", total:184495705, players:[["西蒙斯",27678571,45,"1",193],["吉迪",25000000,37,"11",203],["塞克斯顿",19175000,42,"2",185],["科林斯",18080496,30,"10",211],["P.威廉姆斯",18000000,25,"44",201],["奥科罗",11000000,32,"35",196]], other:65561638},
+  {id:"1610612739", nm:"骑士", total:217367467, players:[["米切尔",46394100,71,"45",185],["莫布利",46394100,38,"4",211],["哈登",39182693,61,"1",196],["艾伦",20000000,32,"31",208],["斯特鲁斯",15936452,31,"16",196],["施罗德",14104000,38,"17",185]], other:35356122},
+  {id:"1610612765", nm:"活塞", total:187970424, players:[["坎宁安",46394100,46,"2",198],["哈里斯",26634146,39,"12",203],["胡尔特",17991071,30,"33",201],["D.罗宾逊",16834692,34,"55",201],["斯图尔特",15000000,26,"28",203],["勒韦尔",14104000,51,"3",198]], other:51012415},
+  {id:"1610612754", nm:"步行者", total:188736250, players:[["西亚卡姆",45550512,52,"43",203],["哈利伯顿",45550512,44,"0",196],["祖巴茨",18102000,31,"40",213],["内姆哈德",18102000,31,"2",193],["托平",14000000,36,"1",206],["内史密斯",11000000,30,"23",198]], other:36431226},
+  {id:"1610612749", nm:"雄鹿", total:184666265, players:[["字母哥",54126450,64,"34",211],["特纳",25318251,31,"18",211],["库兹马",22560605,41,"21",206],["利拉德(摊销)",22516603,71,"0",188],["波蒂斯",13445754,47,"9",208],["丁",6670882,"21*","13",206]], other:40027720},
+  {id:"1610612737", nm:"老鹰", total:187049086, players:[["麦科勒姆",30666666,50,"3",191],["J.约翰逊",30000000,35,"1",203],["库明加",22500000,34,"00",203],["NAW",15161800,37,"9",196],["奥孔古",15000000,28,"17",206],["基斯珀特",13975000,34,"24",198]], other:59745620},
+  {id:"1610612766", nm:"黄蜂", total:188049840, players:[["拉梅洛",37958760,50,"1",198],["M.布里奇斯",25000000,49,"0",198],["J.格林",13666667,33,"14",196],["G.威廉姆斯",13645500,26,"2",198],["科比·怀特",12888889,44,"8",196],["米勒",11968400,45,"24",203]], other:72921624},
+  {id:"1610612748", nm:"热火", total:188302902, players:[["阿德巴约",37096620,38,"13",206],["希罗",31000000,40,"14",196],["威金斯",28223215,42,"22",201],["罗齐尔",26643031,45,"2",185],["鲍威尔",20482758,43,"24",191],["D.米切尔",11600000,27,"45",185]], other:33257278},
+  {id:"1610612753", nm:"魔术", total:189903062, players:[["瓦格纳",38661700,39,"22",208],["贝恩",36725670,49,"0",198],["萨格斯",35000000,31,"4",196],["班凯罗",15334769,50,"5",208],["艾萨克",15000000,24,"1",208],["卡特",10850000,28,"34",208]], other:38330923},
+  {id:"1610612764", nm:"奇才", total:189949625, players:[["戴维斯",54126450,59,"3",208],["特雷·杨",46394100,56,"11",185],["斯马特",14786855,37,"36",191],["萨尔",11808240,"34*","20",213],["T.约翰逊",8237640,"30*","1",198],["库利巴利",7275682,33,"0",201]], other:47320658},
+  {id:"1610612760", nm:"雷霆", total:189104345, players:[["SGA",38333050,54,"2",198],["哈滕斯坦",28500000,30,"55",213],["卡鲁索",18102100,32,"9",198],["多尔特",17222222,35,"5",193],["霍姆格伦",13731368,40,"7",213],["以赛亚·乔",12362338,33,"11",193]], other:60853267},
+  {id:"1610612750", nm:"森林狼", total:198498074, players:[["爱德华兹",45550512,53,"5",193],["戈贝尔",35000000,35,"27",216],["兰德尔",30864198,46,"30",203],["麦克丹尼尔斯",24393104,33,"3",206],["里德",21551724,34,"11",206],["迪文琴佐",11990000,40,"0",193]], other:29148536},
+  {id:"1610612743", nm:"掘金", total:191600929, players:[["约基奇",55224526,61,"15",211],["穆雷",46394100,50,"27",191],["戈登",22841455,50,"50",203],["C.约翰逊",21057065,42,"8",203],["瓦兰丘纳斯",10395000,41,"17",211],["纳吉",8177778,21,"22",206]], other:27511005},
+  {id:"1610612762", nm:"爵士", total:175759008, players:[["马尔卡宁",46394100,49,"23",213],["小贾伦",35000000,44,"13",211],["努尔基奇",19375000,35,"27",211],["克拉克森",10651561,45,"00",193],["朗佐",10000000,34,"2",198],["贝利",9069840,"25*","8",203]], other:45268507},
+  {id:"1610612757", nm:"开拓者", total:189204726, players:[["霍勒迪",32400000,42,"4",193],["格兰特",32000001,44,"9",203],["艾顿",25550814,35,"2",213],["阿夫迪亚",14375000,43,"8",203],["利拉德",14104000,71,"0",188],["R.威廉姆斯",13285713,19,"35",206]], other:57489198},
+  {id:"1610612742", nm:"独行侠", total:187339136, players:[["欧文",36566002,60,"11",188],["米德尔顿",35086419,51,"22",201],["汤普森",16666667,60,"31",198],["加福德",14386320,28,"21",211],["P.华盛顿",14152174,43,"25",201],["弗拉格",13825920,"35*","32",206]], other:56655634},
+  {id:"1610612745", nm:"火箭", total:199783669, players:[["杜兰特",54708608,55,"7",208],["申京",33944954,45,"28",211],["范弗利特",25000000,54,"5",183],["亚当斯",14130434,27,"12",211],["芬尼-史密斯",12700000,28,"4",201],["小史密斯",12350392,31,"10",211]], other:46949281},
+  {id:"1610612763", nm:"灰熊", total:161144762, players:[["莫兰特",39446090,52,"12",188],["KCP",21621500,35,"5",196],["阿尔达马",18485916,33,"7",211],["B.克拉克",12500000,27,"15",203],["杰罗姆",8781000,28,"2",196],["K.安德森",8300531,28,"1",206]], other:52009725},
+  {id:"1610612740", nm:"鹈鹕", total:190898076, players:[["锡安",39446090,44,"1",198],["普尔",31848215,41,"3",193],["D.穆雷",30801103,44,"14",196],["墨菲",25000000,34,"25",203],["赫伯特·琼斯",13937574,30,"5",198],["鲁尼",8000000,20,"00",206]], other:41865094},
+  {id:"1610612759", nm:"马刺", total:188455363, players:[["福克斯",37096620,60,"4",191],["瓦塞尔",27500000,37,"24",196],["巴恩斯",19000000,36,"40",203],["K.约翰逊",18000000,39,"3",196],["奥利尼克",13445122,37,"41",213],["文班亚马",13376695,50,"1",224]], other:60036926},
+  {id:"1610612744", nm:"勇士", total:208824825, players:[["库里",59606817,62,"30",188],["巴特勒",54126450,56,"10",201],["波尔津吉斯",30731707,41,"8",221],["格林",25892857,31,"23",198],["穆迪",11574075,30,"4",196],["霍福德",5685000,36,"42",206]], other:21207919},
+  {id:"1610612746", nm:"快船", total:191938984, players:[["伦纳德",50000000,39,"2",201],["加兰",39446090,51,"10",185],["科林斯",26580000,33,"20",206],["波格丹",16020000,50,"13",196],["小琼斯",10000000,33,"55",198],["马图林",9187573,38,"23",198]], other:40705321},
+  {id:"1610612747", nm:"湖人", total:197146448, players:[["詹姆斯",52627153,61,"23",206],["东契奇",45999660,73,"77",201],["八村垒",18259259,30,"28",203],["里夫斯",13937574,38,"15",196],["范德比尔特",11571429,26,"2",203],["肯纳德",11000000,30,"1",196]], other:43751373},
+  {id:"1610612756", nm:"太阳", total:190450636, players:[["布克",53142264,70,"1",198],["杰伦·格林",33333333,50,"4",196],["布鲁克斯",22124110,36,"9",198],["比尔",19383010,60,"3",191],["G.艾伦",16875000,42,"8",193],["奥尼尔",10125000,29,"00",198]], other:35467919},
+  {id:"1610612758", nm:"国王", total:193326868, players:[["拉文",47499660,51,"8",198],["萨博尼斯",42336000,42,"11",211],["德罗赞",24570000,52,"10",198],["亨特",23303571,35,"12",201],["蒙克",18797619,45,"0",188],["K.穆雷",11144093,47,"13",203]], other:25675925},
 ];
 
-// ===== 工资帽参考线 (2025-26 官方) =====
 const CAPS = [
-  {label:"工资帽 $154.6M",        value:154647000, color:"#43a047"},
-  {label:"奢侈税线 $187.9M",      value:187895000, color:"#fb8c00"},
-  {label:"第一土豪线 $195.9M",    value:195945000, color:"#e53935"},
-  {label:"第二土豪线 $207.8M",    value:207824000, color:"#8e24aa"},
+  {label:"工资帽 154.6M",     value:154647000, color:"#43a047"},
+  {label:"奢侈税 187.9M",     value:187895000, color:"#fb8c00"},
+  {label:"第一土豪线 195.9M", value:195945000, color:"#e53935"},
+  {label:"第二土豪线 207.8M", value:207824000, color:"#8e24aa"},
 ];
 
-// 球员分层配色 (P1..P6 由深到浅蓝绿)
 const SEG_COLORS = ["#0d3b66","#1565c0","#1e88e5","#26a69a","#43c6ac","#80cbc4"];
 const OTHER_COLOR = "#dcdfe4";
-
-const PLOT_H = 600;          // 像素高度对应的薪资上限
-const MAX_VAL = 220000000;   // $220M 顶
-const SCALE = PLOT_H / MAX_VAL;
+const MAX_VAL = 220000000;          // 横轴上限 $220M
+const pct = v => (v / MAX_VAL * 100);
 const fmtM = v => "$" + (v/1e6).toFixed(1) + "M";
+const fmtH = cm => Math.floor(cm/100) + "米" + (cm%100 < 10 ? "0"+(cm%100) : (cm%100));
 
-// 排序：薪资总额从高到低
 const sorted = [...TEAMS].sort((a,b) => b.total - a.total);
 
-const chart = document.getElementById("chart");
-chart.style.height = PLOT_H + "px";
-
-// --- 网格 + Y 轴刻度 ---
-const fullW = 64 + sorted.length * (78 + 8) + 14;
+// --- 顶部刻度 + 工资帽标签 ---
+const ticks = document.getElementById("ticks");
 [0,50,100,150,200].forEach(m => {
-  const y = PLOT_H - m*1e6*SCALE;
-  const g = document.createElement("div");
-  g.className = "gridline"; g.style.top = y + "px"; g.style.width = (fullW-60) + "px";
-  chart.appendChild(g);
   const t = document.createElement("div");
-  t.className = "ytick"; t.style.top = y + "px"; t.textContent = m ? ("$"+m+"M") : "0";
-  chart.appendChild(t);
+  t.className = "tick"; t.style.left = pct(m*1e6) + "%"; t.textContent = m ? ("$"+m+"M") : "$0";
+  ticks.appendChild(t);
 });
-
-// --- 工资帽虚线 ---
-CAPS.forEach((c,i) => {
-  const y = PLOT_H - c.value*SCALE;
-  const ln = document.createElement("div");
-  ln.className = "capline"; ln.style.top = y + "px"; ln.style.width = (fullW-60) + "px"; ln.style.borderTopColor = c.color;
-  chart.appendChild(ln);
+CAPS.forEach(c => {
   const lb = document.createElement("div");
-  lb.className = "caplabel"; lb.style.top = y + "px"; lb.style.left = "66px";
-  lb.style.color = "#fff"; lb.style.background = c.color; lb.textContent = c.label;
-  chart.appendChild(lb);
+  lb.className = "capl"; lb.style.left = pct(c.value) + "%"; lb.style.background = c.color; lb.textContent = c.label;
+  ticks.appendChild(lb);
 });
 
-// --- 各球队柱子 ---
-sorted.forEach((tm, idx) => {
-  const col = document.createElement("div");
-  col.className = "col";
-  col.style.width = "78px";
-  col.style.height = (tm.total*SCALE) + "px";
+// --- 竖向网格线 + 工资帽虚线 (覆盖所有行) ---
+const vlines = document.getElementById("vlines");
+[50,100,150,200].forEach(m => {
+  const g = document.createElement("div");
+  g.className = "vline"; g.style.left = pct(m*1e6) + "%"; g.style.borderLeft = "1px solid #f0f0f0";
+  vlines.appendChild(g);
+});
+CAPS.forEach(c => {
+  const v = document.createElement("div");
+  v.className = "vline"; v.style.left = pct(c.value) + "%"; v.style.borderLeft = "1.5px dashed " + c.color;
+  vlines.appendChild(v);
+});
 
-  // 段：column-reverse → 第一个 DOM 子元素在底部
-  // 先放 top6（高→低，P1 在最底），再放 other（最顶）
+// --- 各球队横向柱 ---
+const rows = document.getElementById("rows");
+sorted.forEach((tm, idx) => {
+  const row = document.createElement("div");
+  row.className = "row";
+
+  const label = document.createElement("div");
+  label.className = "row-label";
+  label.innerHTML =
+    '<span class="rk">'+(idx+1)+'</span>'+
+    '<img src="https://cdn.nba.com/logos/nba/'+tm.id+'/primary/L/logo.svg" alt="">'+
+    '<span class="meta"><span class="tnm">'+tm.nm+'</span><span class="ttot">'+fmtM(tm.total)+'</span></span>';
+  row.appendChild(label);
+
+  const track = document.createElement("div");
+  track.className = "row-track";
+  const bar = document.createElement("div");
+  bar.className = "bar";
+
   tm.players.forEach((p,i) => {
-    const [name, sal] = p;
-    const h = sal*SCALE;
+    const [name, sal, ch, num, h] = p;
     const seg = document.createElement("div");
     seg.className = "seg";
-    seg.style.height = h + "px";
+    seg.style.width = pct(sal) + "%";
     seg.style.background = SEG_COLORS[i];
-    seg.title = name + "：" + fmtM(sal) + "（" + sal.toLocaleString() + "）";
-    if (h >= 12) {
-      const pn = document.createElement("div"); pn.className = "pn"; pn.textContent = name; seg.appendChild(pn);
-    }
-    if (h >= 30) {
-      const ps = document.createElement("div"); ps.className = "ps"; ps.textContent = fmtM(sal); seg.appendChild(ps);
-    }
-    col.appendChild(seg);
+    seg.title = "#"+num+" "+name+" · 身高 "+fmtH(h)+" · 生涯单场最高 "+ch+" 分 · 年薪 "+fmtM(sal)+" ("+sal.toLocaleString()+")";
+    const pn = document.createElement("div"); pn.className = "pn"; pn.textContent = "#"+num+" "+name+" ("+ch+")"; seg.appendChild(pn);
+    const ps = document.createElement("div"); ps.className = "ps"; ps.textContent = fmtH(h)+" · "+fmtM(sal); seg.appendChild(ps);
+    bar.appendChild(seg);
   });
-  // other 段
-  const oh = tm.other*SCALE;
+  // 其他
   const oseg = document.createElement("div");
   oseg.className = "seg other";
-  oseg.style.height = oh + "px";
+  oseg.style.width = pct(tm.other) + "%";
   oseg.style.background = OTHER_COLOR;
-  oseg.title = "其他球员合计：" + fmtM(tm.other) + "（" + tm.other.toLocaleString() + "）";
-  if (oh >= 12) {
-    const pn = document.createElement("div"); pn.className = "pn"; pn.textContent = "其他"; oseg.appendChild(pn);
-  }
-  if (oh >= 30) {
-    const ps = document.createElement("div"); ps.className = "ps"; ps.style.color="#777"; ps.textContent = fmtM(tm.other); oseg.appendChild(ps);
-  }
-  col.appendChild(oseg);
+  oseg.title = "其他球员合计：" + fmtM(tm.other) + " (" + tm.other.toLocaleString() + ")";
+  const opn = document.createElement("div"); opn.className = "pn"; opn.textContent = "其他"; oseg.appendChild(opn);
+  const ops = document.createElement("div"); ops.className = "ps"; ops.style.color = "#777"; ops.textContent = fmtM(tm.other); oseg.appendChild(ops);
+  bar.appendChild(oseg);
 
-  // 柱底：logo + 总额 + 队名 + 名次
-  const foot = document.createElement("div");
-  foot.className = "col-foot";
-  foot.innerHTML =
-    '<img src="https://cdn.nba.com/logos/nba/'+tm.id+'/primary/L/logo.svg" alt="">'+
-    '<div class="tot">'+fmtM(tm.total)+'</div>'+
-    '<div class="nm">'+tm.nm+'</div>'+
-    '<div class="rk">No.'+(idx+1)+'</div>';
-  col.appendChild(foot);
-
-  chart.appendChild(col);
+  track.appendChild(bar);
+  row.appendChild(track);
+  rows.appendChild(row);
 });
 
 // --- 图例 ---
