@@ -20,7 +20,7 @@
   .cap-legend .ln { display: inline-block; width: 22px; height: 0; border-top-width: 2px; border-top-style: dashed; vertical-align: middle; }
 
   /* ===== Chart (rotated: horizontal bars, vertical scroll) ===== */
-  .chart-scroll { max-height: 76vh; overflow-y: auto; overflow-x: hidden; border: 1px solid #eee; border-radius: 8px; }
+  .chart-scroll { overflow: visible; border: 1px solid #eee; border-radius: 8px; }
   .inner { position: relative; }
 
   .axis { position: sticky; top: 0; z-index: 10; display: flex; align-items: flex-end; height: 38px; background: #fff; border-bottom: 1px solid #e8e8e8; }
@@ -61,6 +61,18 @@
     .vlines { left: 120px; }
     .row-label .meta .tnm { font-size: 11px; }
   }
+
+  /* ===== 打印：整页平铺，保留色块 ===== */
+  @page { size: landscape; margin: 10mm; }
+  @media print {
+    body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .seg, .vline, .legend-box, .capl { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .container { max-width: none; padding: 0; }
+    .chart-scroll { border: none; overflow: visible; }
+    .axis { position: static; }            /* 打印时不浮动 */
+    .row { break-inside: avoid; }
+    .scroll-hint { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -74,7 +86,7 @@
   横向堆叠条形图 &middot; 按薪资总额从高到低
 </p>
 <div class="note-box">
-  每条横向柱 = 一支球队当年薪资总额；柱内按球员工资<strong>从高到低（左→右）堆叠</strong>，仅标注最高的 6 名球员。标签格式：<strong>#球衣号 姓名 (生涯单场最高分) &middot; 身高 &middot; 年薪</strong>。竖向虚线为工资帽 / 奢侈税 / 土豪线。<strong>上下滑动查看全部 30 队</strong>。
+  每条横向柱 = 一支球队当年薪资总额；柱内按球员工资<strong>从高到低（左→右）堆叠</strong>，仅标注最高的 6 名球员。标签格式：<strong>#球衣号 姓名 (生涯单场最高分) &middot; 身高 &middot; 年薪</strong>。竖向虚线为工资帽 / 奢侈税 / 土豪线。<strong>全部 30 队平铺展示，便于打印</strong>。
 </div>
 
 <div class="legend" id="legend"></div>
@@ -90,7 +102,7 @@
     <div class="rows" id="rows"></div>
   </div>
 </div>
-<div class="scroll-hint">↑ 上下滑动查看全部 30 支球队 ↓ &nbsp;(鼠标悬停看完整资料)</div>
+<div class="scroll-hint">全部 30 支球队按薪资总额从高到低 &nbsp;(鼠标悬停看完整资料)</div>
 
 <div class="footer">
   薪资来源：HoopsHype 2025-26（当年工资，含交易截止日后阵容及被裁球员摊销死薪）。球衣号 / 身高 / 生涯单场最高得分来自公开资料。<br>
