@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 篮球中心</title>
+<title>2026 体育中心</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -46,6 +46,8 @@
   .nba   { --accent:#1d428a; --bg:linear-gradient(135deg,#1d428a,#c8102e); }
   .cba   { --accent:#d4321a; --bg:linear-gradient(135deg,#e8541c,#b21010); }
   .sal   { --accent:#2e7d32; --bg:linear-gradient(135deg,#2e7d32,#80cbc4); }
+  .fifa  { --accent:#1b5e20; --bg:linear-gradient(135deg,#1b5e20,#43a047); }
+  .csal  { --accent:#c62828; --bg:linear-gradient(135deg,#b71c1c,#ef9a9a); }
 
   .footer { color: #7a7a96; font-size: 12px; margin-top: 34px; text-align: center; line-height: 1.7; }
 
@@ -59,10 +61,10 @@
 <body>
 
 <div class="hero">
-  <div class="ball">🏀</div>
-  <div class="en">2026 Basketball</div>
-  <h1>2026 篮球中心</h1>
-  <div class="sub">NBA 季后赛 &middot; CBA 季后赛 &middot; 球队薪资 &mdash; 更新于 2026年6月10日</div>
+  <div class="ball">🏆</div>
+  <div class="en">2026 Sports</div>
+  <h1>2026 体育中心</h1>
+  <div class="sub">NBA / CBA 季后赛 &middot; 球队薪资 &middot; FIFA 世界杯 &middot; 中国工资帽 &mdash; 更新于 2026年6月12日</div>
 </div>
 
 <div class="cards">
@@ -94,6 +96,26 @@
       <h2>NBA 球队薪资</h2>
       <p>30 支球队 2025-26 赛季薪资总额堆叠柱状图，按当年工资从高到低排列，含工资帽参考线。</p>
       <span class="go">查看薪资图 →</span>
+    </div>
+  </a>
+
+  <a class="card fifa" href="fifa-worldcup.html">
+    <div class="top"><span class="emoji">🌍</span></div>
+    <div class="body">
+      <span class="tag">2026 FIFA World Cup</span>
+      <h2>FIFA 世界杯</h2>
+      <p>美加墨世界杯 48 队 12 组完整分组、各组对阵赛程与积分表，含晋级淘汰赛规则说明。</p>
+      <span class="go">查看分组 &amp; 赛程 →</span>
+    </div>
+  </a>
+
+  <a class="card csal" href="cba-salaries.html">
+    <div class="top"><span class="emoji">💴</span></div>
+    <div class="body">
+      <span class="tag">2026 CBA Salary Cap</span>
+      <h2>中国工资帽</h2>
+      <p>CBA 2025-26 国内球员工资帽官方口径（上限 4200 万 / 顶薪 600 万），含各队薪资结构估算图。</p>
+      <span class="go">查看工资帽 →</span>
     </div>
   </a>
 
