@@ -3,83 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2025-26 CBA 国内球员工资帽 - 球队薪资</title>
+<title>2025-26 CBA 工资帽（双轨制）</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif; color: #1a1a2e; background: #f5f5f5; }
-  .container { max-width: 1180px; margin: 0 auto; background: #fff; padding: 20px; min-height: 100vh; }
+  .container { max-width: 1080px; margin: 0 auto; background: #fff; padding: 22px; min-height: 100vh; }
   h1 { text-align: center; font-size: 25px; margin-bottom: 6px; }
-  .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 14px; line-height: 1.7; }
+  .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 16px; line-height: 1.7; }
   .subtitle a { color: #c62828; text-decoration: none; }
 
-  /* 官方工资帽核心数字卡片 */
-  .cap-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
-  .cap-card { border-radius: 10px; padding: 12px 14px; color: #fff; text-align: center; }
-  .cap-card .lbl { font-size: 12px; opacity: .92; font-weight: 600; }
-  .cap-card .val { font-size: 22px; font-weight: 900; margin-top: 4px; letter-spacing: .5px; }
-  .cap-card .sub { font-size: 10.5px; opacity: .85; margin-top: 2px; }
-  .cc1 { background: linear-gradient(135deg,#b71c1c,#e53935); }
-  .cc2 { background: linear-gradient(135deg,#1565c0,#42a5f5); }
-  .cc3 { background: linear-gradient(135deg,#e65100,#fb8c00); }
-  .cc4 { background: linear-gradient(135deg,#4527a0,#7e57c2); }
+  h2.sec { font-size: 17px; margin: 26px 0 12px; padding-left: 10px; border-left: 4px solid #c62828; }
 
-  .note-box { background: #fff3e0; border: 1px solid #ffe0b2; border-radius: 6px; padding: 9px 14px; font-size: 12.5px; color: #b35900; margin-bottom: 14px; text-align: center; line-height: 1.6; }
+  .twin { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .track { border-radius: 12px; padding: 16px 18px; color: #fff; }
+  .track.dom { background: linear-gradient(135deg,#b71c1c,#e53935); }
+  .track.imp { background: linear-gradient(135deg,#0d47a1,#1976d2); }
+  .track .thd { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+  .track .ttag { font-size: 11px; background: rgba(255,255,255,.22); padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+  .track .big { font-size: 30px; font-weight: 900; margin: 10px 0 2px; letter-spacing: .5px; }
+  .track .big small { font-size: 14px; font-weight: 700; opacity: .9; }
+  .track ul { list-style: none; margin-top: 10px; font-size: 12.5px; line-height: 1.85; }
+  .track ul li { display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,.18); padding: 3px 0; }
+  .track ul li b { font-weight: 800; }
+
+  .note-box { background: #fff3e0; border: 1px solid #ffe0b2; border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #b35900; margin: 14px 0; text-align: center; line-height: 1.6; }
   .note-box strong { color: #8a4500; }
 
-  .cap-legend { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 4px 0 12px; font-size: 12px; }
-  .cap-legend .ln { display: inline-block; width: 22px; height: 0; border-top-width: 2px; border-top-style: dashed; vertical-align: middle; }
-  .legend { display: flex; flex-wrap: wrap; gap: 13px; justify-content: center; margin: 8px 0 4px; font-size: 12.5px; }
-  .legend-item { display: flex; align-items: center; gap: 5px; }
-  .legend-box { width: 14px; height: 14px; border-radius: 3px; }
+  /* 合并视图条形图 */
+  .chart { border: 1px solid #eee; border-radius: 10px; padding: 16px 16px 8px; }
+  .axis { position: relative; height: 20px; margin-left: 150px; border-bottom: 1px solid #e8e8e8; }
+  .axis .tk { position: absolute; bottom: 2px; transform: translateX(-50%); font-size: 10px; color: #999; }
+  .barrow { display: flex; align-items: center; margin-top: 16px; }
+  .barrow .lab { width: 150px; flex-shrink: 0; font-size: 12.5px; font-weight: 700; line-height: 1.25; padding-right: 8px; }
+  .barrow .lab small { display: block; font-weight: 600; color: #999; font-size: 10.5px; }
+  .barrow .track-area { flex: 1; position: relative; height: 40px; }
+  .seg { position: absolute; top: 0; height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+         color: #fff; font-size: 11px; font-weight: 700; overflow: hidden; border-right: 1px solid rgba(255,255,255,.6); }
+  .seg small { font-size: 9.5px; font-weight: 600; opacity: .92; }
+  .capline { position: absolute; top: -6px; bottom: -6px; width: 0; border-left: 2px dashed #333; }
+  .capline span { position: absolute; top: -14px; transform: translateX(-50%); font-size: 9.5px; font-weight: 800; white-space: nowrap; padding: 1px 4px; border-radius: 3px; color: #fff; }
+  .vgrid { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px solid #f3f3f3; }
+  .chart-foot { font-size: 11px; color: #999; margin-top: 14px; text-align: center; line-height: 1.6; }
 
-  .chart-scroll { border: 1px solid #eee; border-radius: 8px; }
-  .inner { position: relative; }
-  .axis { position: sticky; top: 0; z-index: 10; display: flex; align-items: flex-end; height: 38px; background: #fff; border-bottom: 1px solid #e8e8e8; }
-  .axis .spacer { width: 168px; flex-shrink: 0; font-size: 10px; color: #999; display: flex; align-items: flex-end; padding: 0 0 3px 8px; font-weight: 700; }
-  .axis .ticks { flex: 1; position: relative; height: 100%; }
-  .axis .tick { position: absolute; bottom: 3px; transform: translateX(-50%); font-size: 10px; color: #999; }
-  .axis .capl { position: absolute; top: 2px; transform: translateX(-50%); font-size: 9px; font-weight: 700; color: #fff; padding: 1px 4px; border-radius: 3px; white-space: nowrap; }
+  /* 合同档位表 */
+  table.tiers { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.tiers th { background: #fafafa; color: #777; font-weight: 700; padding: 8px 10px; text-align: left; border-bottom: 2px solid #eee; font-size: 12px; }
+  table.tiers td { padding: 8px 10px; border-bottom: 1px solid #f3f3f3; vertical-align: top; }
+  table.tiers td.t { font-weight: 800; white-space: nowrap; }
+  table.tiers .pill { display: inline-block; font-size: 11px; font-weight: 800; color: #fff; background: #c62828; border-radius: 5px; padding: 1px 7px; margin-right: 4px; }
 
-  .vlines { position: absolute; left: 168px; right: 0; top: 38px; bottom: 0; pointer-events: none; z-index: 5; }
-  .vline { position: absolute; top: 0; bottom: 0; width: 0; }
+  .rules { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .rule { background: #f7f9fc; border-radius: 10px; padding: 12px 14px; font-size: 13px; line-height: 1.6; }
+  .rule b { color: #0d47a1; }
 
-  .rows { position: relative; z-index: 1; }
-  .row { display: flex; align-items: stretch; height: 44px; border-bottom: 1px solid #f2f2f2; }
-  .row:hover { background: #fffafa; }
-  .row-label { width: 168px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 8px 0 4px; border-right: 1px solid #eee; }
-  .row-label .rk { width: 20px; text-align: right; color: #c0c0c8; font-size: 11px; font-weight: 800; flex-shrink: 0; }
-  .row-label img { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
-  .row-label .badge { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:800; }
-  .row-label .meta { display: flex; flex-direction: column; line-height: 1.12; overflow: hidden; }
-  .row-label .meta .tnm { font-size: 12.5px; font-weight: 800; white-space: nowrap; }
-  .row-label .meta .ttot { font-size: 10.5px; color: #555; font-weight: 600; }
-
-  .row-track { flex: 1; position: relative; }
-  .bar { position: absolute; left: 0; top: 4px; bottom: 4px; width: 100%; display: flex; }
-  .seg { height: 100%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; align-items: center;
-         overflow: hidden; color: #fff; border-right: 1px solid rgba(255,255,255,0.55); padding: 0 2px; cursor: default; }
-  .seg:last-child { border-right: none; }
-  .seg .pn { font-size: 9.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-  .seg .ps { font-size: 8px; opacity: 0.92; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-  .seg.other { color: #555; }
-
-  .scroll-hint { text-align: center; font-size: 11px; color: #aaa; margin-top: 4px; }
-  .footer { text-align: center; color: #aaa; font-size: 11.5px; margin-top: 18px; border-top: 1px solid #eee; padding-top: 10px; line-height: 1.6; }
+  .footer { text-align: center; color: #aaa; font-size: 11.5px; margin-top: 26px; border-top: 1px solid #eee; padding-top: 12px; line-height: 1.7; }
 
   @media (max-width: 768px) {
-    .container { padding: 10px; }
+    .container { padding: 12px; }
     h1 { font-size: 19px; }
-    .cap-cards { grid-template-columns: repeat(2, 1fr); }
-    .axis .spacer, .row-label, .vlines { width: 120px; }
-    .vlines { left: 120px; }
-    .row-label .meta .tnm { font-size: 11px; }
+    .twin, .rules { grid-template-columns: 1fr; }
+    .axis, .barrow .lab { margin-left: 0; }
+    .barrow { flex-direction: column; align-items: stretch; }
+    .barrow .lab { width: auto; margin-bottom: 6px; }
+    .axis { display: none; }
   }
 </style>
 </head>
 <body>
 <div class="container">
 
-<h1>💰 2025-26 赛季 CBA 国内球员工资帽</h1>
+<h1>💴 2025-26 赛季 CBA 工资帽（双轨制）</h1>
 <p class="subtitle">
   <a href="index.html" style="font-weight:700;color:#444;">🏠 首页</a> &nbsp;|&nbsp;
   <a href="nba-playoffs.html">NBA 季后赛</a> &nbsp;|&nbsp;
@@ -88,165 +81,165 @@
   <a href="fifa-worldcup.html">FIFA 世界杯</a>
 </p>
 
-<!-- 官方工资帽核心数字（CBA 官方公布，确切数据） -->
-<div class="cap-cards">
-  <div class="cap-card cc1"><div class="lbl">国内球员工资帽 · 上限</div><div class="val">4200 万</div><div class="sub">人民币 / 队 / 赛季</div></div>
-  <div class="cap-card cc2"><div class="lbl">国内球员工资帽 · 下限</div><div class="val">1400 万</div><div class="sub">人民币 / 队 / 赛季</div></div>
-  <div class="cap-card cc3"><div class="lbl">国内球员 · 顶薪</div><div class="val">600 万</div><div class="sub">人民币 / 人 / 赛季</div></div>
-  <div class="cap-card cc4"><div class="lbl">外援工资帽</div><div class="val">425 万</div><div class="sub">美元 / 队 / 赛季</div></div>
-</div>
-
 <div class="note-box">
-  上方为 <strong>CBA 官方公布</strong>的 2025-26 赛季工资帽口径（与上赛季持平）。下方横向柱状图为<strong>各队国内球员薪资结构示意</strong>：
-  CBA 不公开球员具体合同，柱内金额为<strong>媒体公开估算，仅供参考</strong>；外援薪资单独计算、不计入国内工资帽。
+  CBA 实行<strong>双轨制工资帽</strong>：<strong>国内球员</strong>（人民币）与<strong>外援</strong>（美元）各有一套独立工资帽，分开计算、互不挤占。
+  CBA <strong>不公开球员个人合同金额</strong>，故本页只展示官方公布的工资帽口径，不做逐人薪资估算。
 </div>
 
-<div class="legend" id="legend"></div>
-<div class="cap-legend" id="capLegend"></div>
-
-<div class="chart-scroll">
-  <div class="inner" id="inner">
-    <div class="axis">
-      <div class="spacer">球队 / 国内总额</div>
-      <div class="ticks" id="ticks"></div>
-    </div>
-    <div class="vlines" id="vlines"></div>
-    <div class="rows" id="rows"></div>
+<!-- 双轨核心数字 -->
+<div class="twin">
+  <div class="track dom">
+    <div class="thd">🇨🇳 国内球员工资帽 <span class="ttag">人民币</span></div>
+    <div class="big">4200<small> 万 / 队</small></div>
+    <ul>
+      <li><span>工资帽下限</span><b>1400 万 / 队</b></li>
+      <li><span>个人顶薪（D 类）</span><b>600 万 / 人</b></li>
+      <li><span>顶薪名额</span><b>每队最多 3 人</b></li>
+    </ul>
+  </div>
+  <div class="track imp">
+    <div class="thd">🌐 外援工资帽 <span class="ttag">美元</span></div>
+    <div class="big">425<small> 万美元 / 队</small></div>
+    <ul>
+      <li><span>折合人民币（≈7.1）</span><b>约 3000 万 / 队</b></li>
+      <li><span>上场规则</span><b>4 节 7 人次</b></li>
+      <li><span>注册</span><b>同时 4 人 · 整季≤8 人次</b></li>
+    </ul>
   </div>
 </div>
-<div class="scroll-hint">各队按国内球员薪资估算总额从高到低 &nbsp;(鼠标悬停看明细)</div>
+
+<!-- 合并视图 -->
+<h2 class="sec">合并视图：一支球队的薪资天花板</h2>
+<p style="font-size:13px;color:#666;margin-bottom:6px;line-height:1.6;">
+  把两条轨道按汇率换算到同一人民币坐标，即可看到一支球队的<strong>总薪资天花板 ≈ 7200 万元</strong>（国内 4200 万 + 外援 ≈3000 万）。
+</p>
+<div class="chart">
+  <div class="axis" id="axis"></div>
+  <div id="bars"></div>
+  <div class="chart-foot">
+    横轴单位：万元人民币（外援 425 万美元按 ≈7.1 汇率折算，仅用于同坐标对比）。<br>
+    国内轨「顶薪空间」= 3 名 D 类顶薪 600 万 × 3 = 1800 万；其余为非顶薪国内球员的薪资空间。
+  </div>
+</div>
+
+<!-- 国内合同档位 -->
+<h2 class="sec">国内球员合同档位（计入国内工资帽）</h2>
+<table class="tiers">
+  <thead><tr><th style="width:170px;">合同类型</th><th>说明</th><th style="width:180px;">关键限制</th></tr></thead>
+  <tbody>
+    <tr><td class="t"><span class="pill">A1/A2</span>新秀合同</td><td>A1 自行培养、A2 选秀新秀，进入联盟前几年的标准起薪合同。</td><td>A1 年薪约 15 万–375 万</td></tr>
+    <tr><td class="t"><span class="pill">B</span>保护合同</td><td>俱乐部对自有年轻球员的优先续约/保护合同。</td><td>设有最低保障，限定年限</td></tr>
+    <tr><td class="t"><span class="pill">C</span>常规合同</td><td>多数主力/角色球员的中档合同。</td><td>占用国内工资帽</td></tr>
+    <tr><td class="t"><span class="pill">D</span>顶薪合同</td><td>本土核心球员的最高档合同。</td><td>顶薪 600 万 · 每队最多 3 人</td></tr>
+    <tr><td class="t"><span class="pill">E</span>老将合同</td><td>面向资深老将的特例合同。</td><td><b>不占工资帽</b> · 每队最多 2 人</td></tr>
+  </tbody>
+</table>
+<p style="font-size:11.5px;color:#999;margin-top:8px;line-height:1.6;">
+  注：签《标准合同》的球员享合同保障险；保障险出险期间获赔的基本工资/赢球奖金不计入工资帽。合同分类的具体起薪区间以 CBA 官方细则为准。
+</p>
+
+<!-- 外援规则 -->
+<h2 class="sec">外援轨道规则（2025-26）</h2>
+<div class="rules">
+  <div class="rule">💵 <b>工资帽 425 万美元/队</b>：本赛季为<b>固定硬帽</b>；自 26-27 赛季起拟改为<b>阶梯软帽</b>（常规赛低、季后赛逐轮提高）。</div>
+  <div class="rule">⏱ <b>4 节 7 人次</b>：每队最多注册 4 名外援；前三节每节最多 2 人次、第四节最多 1 人次上场。</div>
+  <div class="rule">📝 <b>注册</b>：注册期内可同时注册 4 名外援；整季同一俱乐部最多 8 人次，同一外援最多注册 2 次。</div>
+  <div class="rule">🔀 <b>独立于国内帽</b>：外援薪资单独以美元计算，<b>不挤占</b>国内球员 4200 万的工资帽空间。</div>
+</div>
 
 <div class="footer">
-  工资帽口径来源：CBA 联盟《2025-2026 赛季球员选秀、工资帽、聘用及交易管理规定》（2025 年 7 月公布）。<br>
-  各队球员金额为媒体公开估算，<strong>CBA 未官方披露个人合同</strong>，数值仅供参考。更新于 2026 年 6 月 12 日。
+  口径来源：CBA 联盟《2025-2026 赛季球员选秀、工资帽、聘用及交易管理规定》（2025 年 7 月公布）及公开报道。<br>
+  汇率换算仅为同坐标对比之用；合同档位起薪区间、外援阶梯帽细则以官方文件为准。更新于 2026 年 6 月 12 日。
 </div>
 
 </div><!-- container -->
 
 <script>
-// ===== CBA 国内球员薪资（估算，万元人民币）=====
-// players: [姓名, 估算年薪万元]，高→低；other = 其余国内球员合计
-// logo：logos/ 下的文件名；无 logo 用 badge 首字代替
-const TEAMS = [
-  {nm:"新疆", logo:null,        bd:"#c62828", players:[["周琦",600],["阿不都沙拉木",600],["齐麟",450],["于德豪",250]], other:1600},
-  {nm:"辽宁", logo:"liaoning",  bd:"#d4321a", players:[["赵继伟",600],["张镇麟",550],["韩德君",450],["付豪",350]], other:1450},
-  {nm:"广东", logo:"guangdong", bd:"#c8102e", players:[["胡明轩",600],["徐杰",550],["杜润旺",300],["张昊",230]], other:1320},
-  {nm:"浙江广厦", logo:"guangsha", bd:"#1d428a", players:[["孙铭徽",600],["胡金秋",600],["赵岩昊",350],["朱俊龙",300]], other:1250},
-  {nm:"上海", logo:"shanghai",  bd:"#1565c0", players:[["王哲林",600],["李弘权",350],["李添荣",300],["刘铮",260]], other:1390},
-  {nm:"北京", logo:"beijing",   bd:"#1b5e20", players:[["陈盈骏",600],["曾凡博",500],["范子铭",480],["翟晓川",300]], other:1120},
-  {nm:"浙江稠州", logo:"zhejiang", bd:"#e8541c", players:[["吴前",600],["余嘉豪",420],["程帅澎",420],["王奕博",230]], other:1230},
-  {nm:"深圳", logo:"shenzhen",  bd:"#0288d1", players:[["沈梓捷",500],["贺希宁",420],["周鹏",260],["卢鹏羽",200]], other:1320},
-  {nm:"山东", logo:"shandong",  bd:"#e53935", players:[["高诗岩",520],["陶汉林",420],["王睿泽",260],["陈培东",220]], other:1180},
-  {nm:"山西", logo:"shanxi",    bd:"#c62828", players:[["原帅",420],["葛昭宝",330],["张宁",330],["焦泊乔",200]], other:1120},
-  {nm:"青岛", logo:"qingdao",   bd:"#0277bd", players:[["王睿泽",260],["赵嘉义",240],["杨金蒙",220],["刘传兴",200]], other:1080},
-  {nm:"宁波", logo:"ningbo",    bd:"#00838f", players:[["李江淮",240],["容子峰",200],["陆文博",200],["郭凯",180]], other:980},
-  {nm:"广州", logo:"guangzhou", bd:"#6a1b9a", players:[["祝铭震",300],["陈盈可",200],["焦恩格尔",200],["崔永熙",260]], other:1040},
-  {nm:"吉林", logo:null,        bd:"#2e7d32", players:[["姜伟泽",450],["崔晋铭",240],["钟诚",220],["张彪",200]], other:1090},
-  {nm:"江苏", logo:null,        bd:"#283593", players:[["李禄曈",240],["崔晓龙",230],["史鸿飞",230],["吴冠希",220]], other:1070},
-  {nm:"天津", logo:null,        bd:"#ad1457", players:[["林庭谦",520],["孟子凯",240],["王洪",200],["张哲嘉",200]], other:1040},
-];
+// ===== 合并视图数据（万元人民币）=====
+const MAX = 8000;                       // 横轴上限 8000 万
+const pct = v => (v / MAX * 100);
 
-TEAMS.forEach(t => t.total = t.players.reduce((s,p)=>s+p[1],0) + t.other);
-
-const CAPS = [
-  {label:"工资帽下限 1400万", value:1400, color:"#1565c0"},
-  {label:"工资帽上限 4200万", value:4200, color:"#c62828"},
-];
-
-const SEG_COLORS = ["#7f0000","#b71c1c","#e53935","#ef5350","#ff8a80"];
-const OTHER_COLOR = "#e0e0e0";
-const MAX_VAL = 5000;                 // 横轴上限 5000 万
-const pct = v => (v / MAX_VAL * 100);
-const fmtW = v => v.toLocaleString() + "万";
-
-const sorted = [...TEAMS].sort((a,b) => b.total - a.total);
-
-// --- 顶部刻度 + 工资帽标签 ---
-const ticks = document.getElementById("ticks");
-[0,1000,2000,3000,4000,5000].forEach(m => {
+// 顶部刻度 + 网格
+const axis = document.getElementById("axis");
+[0,2000,4000,6000,8000].forEach(v => {
   const t = document.createElement("div");
-  t.className = "tick"; t.style.left = pct(m) + "%"; t.textContent = m ? (m/1000)+"千万" : "0";
-  ticks.appendChild(t);
-});
-CAPS.forEach(c => {
-  const lb = document.createElement("div");
-  lb.className = "capl"; lb.style.left = pct(c.value) + "%"; lb.style.background = c.color; lb.textContent = c.label;
-  ticks.appendChild(lb);
+  t.className = "tk"; t.style.left = pct(v) + "%"; t.textContent = v ? v + "万" : "0";
+  axis.appendChild(t);
 });
 
-// --- 竖向网格线 + 工资帽虚线 ---
-const vlines = document.getElementById("vlines");
-[1000,2000,3000,4000].forEach(m => {
-  const g = document.createElement("div");
-  g.className = "vline"; g.style.left = pct(m) + "%"; g.style.borderLeft = "1px solid #f0f0f0";
-  vlines.appendChild(g);
-});
-CAPS.forEach(c => {
-  const v = document.createElement("div");
-  v.className = "vline"; v.style.left = pct(c.value) + "%"; v.style.borderLeft = "1.5px dashed " + c.color;
-  vlines.appendChild(v);
-});
+// 三条柱：[标签, 副标签, 分段[{w, color, name, sub}], 工资帽虚线[{v,label,color}]]
+const ROWS = [
+  {
+    lab: "国内球员工资帽", sub: "人民币 · 上限 4200 万",
+    segs: [
+      {v:1800, color:"#b71c1c", name:"顶薪空间", sub:"3×600万 D类"},
+      {v:2400, color:"#ef9a9a", name:"其余国内薪资空间", sub:"A/B/C 类"},
+    ],
+    caps: [
+      {v:1400, label:"下限 1400万", color:"#1565c0"},
+      {v:4200, label:"上限 4200万", color:"#b71c1c"},
+    ],
+  },
+  {
+    lab: "外援工资帽", sub: "425万美元 ≈ 3000万",
+    segs: [ {v:3000, color:"#1976d2", name:"外援薪资", sub:"425万美元 / 队"} ],
+    caps: [ {v:3000, label:"≈3000万", color:"#0d47a1"} ],
+  },
+  {
+    lab: "球队薪资天花板", sub: "国内 + 外援合计",
+    segs: [
+      {v:4200, color:"#c62828", name:"国内球员", sub:"4200万"},
+      {v:3000, color:"#1976d2", name:"外援", sub:"≈3000万"},
+    ],
+    caps: [ {v:7200, label:"≈7200万", color:"#37474f"} ],
+  },
+];
 
-// --- 各球队横向柱 ---
-const rows = document.getElementById("rows");
-sorted.forEach((tm, idx) => {
+const bars = document.getElementById("bars");
+ROWS.forEach(r => {
   const row = document.createElement("div");
-  row.className = "row";
+  row.className = "barrow";
 
-  const label = document.createElement("div");
-  label.className = "row-label";
-  const logoHtml = tm.logo
-    ? '<img src="logos/' + tm.logo + '.png" alt="">'
-    : '<span class="badge" style="background:' + tm.bd + '">' + tm.nm.charAt(0) + '</span>';
-  label.innerHTML =
-    '<span class="rk">' + (idx+1) + '</span>' + logoHtml +
-    '<span class="meta"><span class="tnm">' + tm.nm + '</span><span class="ttot">' + fmtW(tm.total) + '</span></span>';
-  row.appendChild(label);
+  const lab = document.createElement("div");
+  lab.className = "lab";
+  lab.innerHTML = r.lab + "<small>" + r.sub + "</small>";
+  row.appendChild(lab);
 
-  const track = document.createElement("div");
-  track.className = "row-track";
-  const bar = document.createElement("div");
-  bar.className = "bar";
+  const area = document.createElement("div");
+  area.className = "track-area";
 
-  tm.players.forEach((p,i) => {
-    const [name, sal] = p;
+  // 背景网格
+  [2000,4000,6000].forEach(g => {
+    const vg = document.createElement("div");
+    vg.className = "vgrid"; vg.style.left = pct(g) + "%"; area.appendChild(vg);
+  });
+
+  // 分段（左→右累加）
+  let acc = 0;
+  r.segs.forEach(s => {
     const seg = document.createElement("div");
     seg.className = "seg";
-    seg.style.width = pct(sal) + "%";
-    seg.style.background = SEG_COLORS[i] || SEG_COLORS[SEG_COLORS.length-1];
-    seg.title = name + " · 估算年薪 " + fmtW(sal) + (sal>=600 ? "（顶薪）" : "");
-    const pn = document.createElement("div"); pn.className = "pn"; pn.textContent = name; seg.appendChild(pn);
-    const ps = document.createElement("div"); ps.className = "ps"; ps.textContent = fmtW(sal); seg.appendChild(ps);
-    bar.appendChild(seg);
+    seg.style.left = pct(acc) + "%";
+    seg.style.width = pct(s.v) + "%";
+    seg.style.background = s.color;
+    seg.innerHTML = s.name + "<small>" + s.sub + "</small>";
+    seg.title = s.name + "：" + s.v + " 万元";
+    area.appendChild(seg);
+    acc += s.v;
   });
-  // 其他
-  const oseg = document.createElement("div");
-  oseg.className = "seg other";
-  oseg.style.width = pct(tm.other) + "%";
-  oseg.style.background = OTHER_COLOR;
-  oseg.title = "其他国内球员合计（估算）：" + fmtW(tm.other);
-  const opn = document.createElement("div"); opn.className = "pn"; opn.textContent = "其他"; oseg.appendChild(opn);
-  const ops = document.createElement("div"); ops.className = "ps"; ops.style.color = "#777"; ops.textContent = fmtW(tm.other); oseg.appendChild(ops);
-  bar.appendChild(oseg);
 
-  track.appendChild(bar);
-  row.appendChild(track);
-  rows.appendChild(row);
-});
+  // 工资帽虚线
+  r.caps.forEach(c => {
+    const cl = document.createElement("div");
+    cl.className = "capline"; cl.style.left = pct(c.v) + "%"; cl.style.borderColor = c.color;
+    const sp = document.createElement("span");
+    sp.textContent = c.label; sp.style.background = c.color;
+    cl.appendChild(sp);
+    area.appendChild(cl);
+  });
 
-// --- 图例 ---
-const legend = document.getElementById("legend");
-["薪资最高(P1)","P2","P3","P4","其他国内球员"].forEach((lab,i) => {
-  const color = i < 4 ? SEG_COLORS[i] : OTHER_COLOR;
-  const it = document.createElement("div"); it.className = "legend-item";
-  it.innerHTML = '<span class="legend-box" style="background:' + color + '"></span>' + lab;
-  legend.appendChild(it);
-});
-const capL = document.getElementById("capLegend");
-CAPS.forEach(c => {
-  const it = document.createElement("div"); it.className = "legend-item";
-  it.innerHTML = '<span class="ln" style="border-top-color:' + c.color + '"></span>' + c.label;
-  capL.appendChild(it);
+  row.appendChild(area);
+  bars.appendChild(row);
 });
 </script>
 </body>
