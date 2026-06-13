@@ -92,6 +92,17 @@
     .barrow .lab { width: auto; margin-bottom: 6px; }
     .axis { display: none; }
   }
+
+  /* ===== 打印：强制保留红/蓝色块 ===== */
+  @page { size: landscape; margin: 10mm; }
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { background: #fff; }
+    .container { max-width: none; padding: 0; }
+    .tc, .chart { border: 1px solid #ccc; }
+    .tc-row, .barrow, .twin, .rules .rule, table.tiers tr { break-inside: avoid; }
+    h2.sec { break-after: avoid; }
+  }
 </style>
 </head>
 <body>
