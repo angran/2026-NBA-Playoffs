@@ -45,6 +45,29 @@
   .vgrid { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px solid #f3f3f3; }
   .chart-foot { font-size: 11px; color: #999; margin-top: 14px; text-align: center; line-height: 1.6; }
 
+  /* 各队工资帽使用条形图 */
+  .usage-note { font-size: 12.5px; color: #666; line-height: 1.6; margin-bottom: 10px; }
+  .usage-note strong { color: #c62828; }
+  .tc { border: 1px solid #eee; border-radius: 10px; overflow: hidden; }
+  .tc-axis { display: flex; align-items: flex-end; height: 26px; border-bottom: 1px solid #ececec; }
+  .tc-spacer { width: 150px; flex-shrink: 0; }
+  .tc-ticks { flex: 1; position: relative; height: 100%; }
+  .tc-ticks .tk { position: absolute; bottom: 3px; transform: translateX(-50%); font-size: 10px; color: #aaa; }
+  .tc-row { display: flex; align-items: stretch; height: 40px; border-bottom: 1px solid #f4f4f4; }
+  .tc-row:hover { background: #fffafa; }
+  .tc-lab { width: 150px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 6px 0 4px; border-right: 1px solid #eee; }
+  .tc-lab .rk { width: 16px; text-align: right; color: #c8c8d0; font-size: 11px; font-weight: 800; }
+  .tc-lab img { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; }
+  .tc-lab .badge { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: 800; }
+  .tc-lab .nm { font-size: 12.5px; font-weight: 800; white-space: nowrap; overflow: hidden; }
+  .tc-track { flex: 1; position: relative; }
+  .tc-bar { position: absolute; left: 0; top: 5px; bottom: 5px; display: flex; }
+  .tc-seg { height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #fff; font-size: 9.5px; font-weight: 700; border-right: 1px solid rgba(255,255,255,.5); white-space: nowrap; padding: 0 2px; }
+  .tc-seg.rest { background: #ef9a9a; color: #7a1f1f; }
+  .tc-seg.dx { background: #b71c1c; }
+  .tc-cap { position: absolute; top: 0; bottom: 0; width: 0; }
+  .tc-total { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 800; color: #555; padding-left: 5px; }
+
   /* 合同档位表 */
   table.tiers { width: 100%; border-collapse: collapse; font-size: 13px; }
   table.tiers th { background: #fafafa; color: #777; font-weight: 700; padding: 8px 10px; text-align: left; border-bottom: 2px solid #eee; font-size: 12px; }
@@ -121,6 +144,21 @@
     国内轨「顶薪空间」= 3 名 D 类顶薪 600 万 × 3 = 1800 万；其余为非顶薪国内球员的薪资空间。
   </div>
 </div>
+
+<!-- 各队工资帽使用情况 -->
+<h2 class="sec">各队工资帽使用情况（国内球员，20 队）</h2>
+<p class="usage-note">
+  深红块 = 已确认的<strong>顶薪（D 类）球员</strong>，每人 600 万（公开报道，<strong>可靠</strong>，悬停看名字）；
+  粉色块 = 其余国内球员薪资<strong>（媒体估算）</strong>；灰色 = 距上限 4200 万的剩余空间。蓝/红虚线分别为<strong>下限 1400 万 / 上限 4200 万</strong>，按估算总额排序。
+</p>
+<div class="tc">
+  <div class="tc-axis"><div class="tc-spacer"></div><div class="tc-ticks" id="tcTicks"></div></div>
+  <div id="tcRows"></div>
+</div>
+<p class="chart-foot">
+  顶薪名单来源：公开报道（2025-26 全联盟共 28 名 D 类顶薪球员；北京/浙江/山西/广厦 4 队用满 3 个名额）。
+  「其余国内薪资」与总额为<strong>媒体估算</strong>，CBA 未公开个人合同，仅供参考。
+</p>
 
 <!-- 国内合同档位 -->
 <h2 class="sec">国内球员合同档位（计入国内工资帽）</h2>
@@ -240,6 +278,100 @@ ROWS.forEach(r => {
 
   row.appendChild(area);
   bars.appendChild(row);
+});
+
+// ===== 各队工资帽使用情况（国内球员）=====
+// dx = 已确认 D 类顶薪球员（每人 600 万，公开报道）；rest = 其余国内薪资估算（万元）
+const CAP_HI = 4200, CAP_LO = 1400;
+const TC_TEAMS = [
+  {nm:"北京",   logo:"beijing",   bd:"#1b5e20", dx:["周琦","陈盈骏","范子铭"], rest:2400},
+  {nm:"浙江广厦", logo:"guangsha", bd:"#1d428a", dx:["胡金秋","孙铭徽","赵岩昊"], rest:2200},
+  {nm:"广东",   logo:"guangdong", bd:"#c8102e", dx:["胡明轩"], rest:3200},
+  {nm:"浙江稠州", logo:"zhejiang", bd:"#e8541c", dx:["吴前","刘泽一","程帅澎"], rest:1900},
+  {nm:"辽宁",   logo:"liaoning",  bd:"#d4321a", dx:["赵继伟","付豪"], rest:2300},
+  {nm:"上海",   logo:"shanghai",  bd:"#1565c0", dx:["王哲林"], rest:2900},
+  {nm:"山西",   logo:"shanxi",    bd:"#c62828", dx:["张宁","葛昭宝","原帅"], rest:1500},
+  {nm:"山东",   logo:"shandong",  bd:"#e53935", dx:["陶汉林","高诗岩"], rest:1900},
+  {nm:"深圳",   logo:"shenzhen",  bd:"#0288d1", dx:["贺希宁"], rest:2400},
+  {nm:"北控",   logo:null,        bd:"#37474f", dx:["邹雨宸","沈梓捷"], rest:1500},
+  {nm:"新疆",   logo:null,        bd:"#c62828", dx:["阿不都沙拉木"], rest:2100},
+  {nm:"天津",   logo:null,        bd:"#ad1457", dx:["林庭谦"], rest:1700},
+  {nm:"青岛",   logo:"qingdao",   bd:"#0277bd", dx:["王奕博"], rest:1700},
+  {nm:"广州",   logo:"guangzhou", bd:"#6a1b9a", dx:["郭艾伦"], rest:1600},
+  {nm:"同曦",   logo:null,        bd:"#283593", dx:["祝铭震"], rest:1450},
+  {nm:"吉林",   logo:null,        bd:"#2e7d32", dx:[], rest:1900},
+  {nm:"福建",   logo:null,        bd:"#00838f", dx:["黄毅超"], rest:1250},
+  {nm:"江苏",   logo:null,        bd:"#1565c0", dx:[], rest:1800},
+  {nm:"宁波",   logo:"ningbo",    bd:"#00838f", dx:["王俊杰"], rest:1150},
+  {nm:"四川",   logo:null,        bd:"#5d4037", dx:[], rest:1500},
+];
+TC_TEAMS.forEach(t => t.total = t.dx.length * 600 + t.rest);
+TC_TEAMS.sort((a,b) => b.total - a.total);
+
+const TC_MAX = 4400;                    // 轴上限略高于 4200，给标签留位
+const tpct = v => (v / TC_MAX * 100);
+
+// 刻度
+const tcTicks = document.getElementById("tcTicks");
+[0,1000,2000,3000,4000].forEach(v => {
+  const t = document.createElement("div");
+  t.className = "tk"; t.style.left = tpct(v) + "%"; t.textContent = v ? v + "万" : "0";
+  tcTicks.appendChild(t);
+});
+
+const tcRows = document.getElementById("tcRows");
+TC_TEAMS.forEach((tm, idx) => {
+  const row = document.createElement("div");
+  row.className = "tc-row";
+
+  const lab = document.createElement("div");
+  lab.className = "tc-lab";
+  const logoHtml = tm.logo
+    ? '<img src="logos/' + tm.logo + '.png" alt="">'
+    : '<span class="badge" style="background:' + tm.bd + '">' + tm.nm.charAt(0) + '</span>';
+  lab.innerHTML = '<span class="rk">' + (idx + 1) + '</span>' + logoHtml + '<span class="nm">' + tm.nm + '</span>';
+  row.appendChild(lab);
+
+  const track = document.createElement("div");
+  track.className = "tc-track";
+
+  // 背景网格
+  [1000,2000,3000,4000].forEach(g => {
+    const vg = document.createElement("div"); vg.className = "tc-cap";
+    vg.style.left = tpct(g) + "%"; vg.style.borderLeft = "1px solid #f3f3f3"; track.appendChild(vg);
+  });
+  // 工资帽虚线
+  [{v:CAP_LO,c:"#1565c0"},{v:CAP_HI,c:"#b71c1c"}].forEach(c => {
+    const cl = document.createElement("div"); cl.className = "tc-cap";
+    cl.style.left = tpct(c.v) + "%"; cl.style.borderLeft = "1.5px dashed " + c.c; track.appendChild(cl);
+  });
+
+  const bar = document.createElement("div");
+  bar.className = "tc-bar"; bar.style.width = tpct(tm.total) + "%";
+  // 顶薪段
+  tm.dx.forEach(name => {
+    const s = document.createElement("div"); s.className = "tc-seg dx";
+    s.style.width = (600 / tm.total * 100) + "%";
+    s.title = name + "：顶薪 600 万（D 类，公开报道）";
+    s.textContent = name;
+    bar.appendChild(s);
+  });
+  // 其余估算段
+  const r = document.createElement("div"); r.className = "tc-seg rest";
+  r.style.width = (tm.rest / tm.total * 100) + "%";
+  r.title = "其余国内球员薪资（估算）：" + tm.rest + " 万";
+  r.textContent = "其余约" + tm.rest + "万";
+  bar.appendChild(r);
+  track.appendChild(bar);
+
+  // 总额标签
+  const tot = document.createElement("div");
+  tot.className = "tc-total"; tot.style.left = tpct(tm.total) + "%";
+  tot.textContent = (tm.dx.length ? tm.dx.length + "顶薪·" : "") + "约" + tm.total + "万";
+  track.appendChild(tot);
+
+  row.appendChild(track);
+  tcRows.appendChild(row);
 });
 </script>
 </body>
