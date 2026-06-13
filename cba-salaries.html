@@ -62,7 +62,9 @@
   .tc-lab .nm { font-size: 12.5px; font-weight: 800; white-space: nowrap; overflow: hidden; }
   .tc-track { flex: 1; position: relative; }
   .tc-bar { position: absolute; left: 0; top: 5px; bottom: 5px; display: flex; }
-  .tc-seg { height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #fff; font-size: 9.5px; font-weight: 700; border-right: 1px solid rgba(255,255,255,.5); white-space: nowrap; padding: 0 2px; }
+  .tc-seg { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; color: #fff; border-right: 1px solid rgba(255,255,255,.5); white-space: nowrap; padding: 0 2px; line-height: 1.15; }
+  .tc-seg .snm { font-size: 9px; font-weight: 800; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  .tc-seg .amt { font-size: 8px; font-weight: 600; opacity: .92; }
   .tc-seg.rest { background: #ef9a9a; color: #7a1f1f; }
   .tc-seg.dx { background: #b71c1c; }
   .tc-cap { position: absolute; top: 0; bottom: 0; width: 0; }
@@ -395,29 +397,32 @@ TC_TEAMS.forEach((tm, idx) => {
   const bar = document.createElement("div");
   bar.className = "tc-bar"; bar.style.width = tpct(tm.total) + "%";
 
-  const addSeg = (val, color, name, note, textColor) => {
+  const addSeg = (val, color, name, amt, note, textColor) => {
     const s = document.createElement("div"); s.className = "tc-seg";
     s.style.width = (val / tm.total * 100) + "%";
     s.style.background = color;
     if (textColor) s.style.color = textColor;
     s.title = name + "：" + note;
-    s.textContent = name;
+    const nm = document.createElement("div"); nm.className = "snm"; nm.textContent = name; s.appendChild(nm);
+    const am = document.createElement("div"); am.className = "amt"; am.textContent = amt; s.appendChild(am);
     bar.appendChild(s);
   };
 
   // 国内：顶薪/主力（命名）
   tm.dom.forEach(p => {
     const [name, sal, tier] = p;
-    addSeg(sal, tierColor(tier), name, tier === "t" ? "顶薪 600 万（D 类，公开报道）" : "国内主力 · 约 " + sal + " 万（估算）");
+    addSeg(sal, tierColor(tier), name,
+      tier === "t" ? "600万" : "约" + sal + "万",
+      tier === "t" ? "顶薪 600 万（D 类，公开报道）" : "国内主力 · 约 " + sal + " 万（估算）");
   });
   // 国内：其余
-  if (tm.domRest > 0) addSeg(tm.domRest, "#ef9a9a", "其余国内", "其余国内球员合计 约 " + tm.domRest + " 万（估算）", "#7a1f1f");
+  if (tm.domRest > 0) addSeg(tm.domRest, "#ef9a9a", "其余国内", "约" + tm.domRest + "万", "其余国内球员合计 约 " + tm.domRest + " 万（估算）", "#7a1f1f");
   // 外援（蓝系，按重要性深→浅）
   tm.imp.forEach((p, i) => {
     const [name, sal] = p;
-    addSeg(sal, TC_BLUES[Math.min(i, TC_BLUES.length - 1)], name, "外援 · 约 " + sal + " 万（折算人民币，估算）");
+    addSeg(sal, TC_BLUES[Math.min(i, TC_BLUES.length - 1)], name, "约" + sal + "万", "外援 · 约 " + sal + " 万（折算人民币，估算）");
   });
-  if (tm.impRest > 0) addSeg(tm.impRest, TC_REST_BLUE, "其余外援", "其余外援合计 约 " + tm.impRest + " 万（折算，估算）", "#0d47a1");
+  if (tm.impRest > 0) addSeg(tm.impRest, TC_REST_BLUE, "其余外援", "约" + tm.impRest + "万", "其余外援合计 约 " + tm.impRest + " 万（折算，估算）", "#0d47a1");
 
   track.appendChild(bar);
 
