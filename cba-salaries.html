@@ -66,7 +66,7 @@
   .tc-seg.rest { background: #ef9a9a; color: #7a1f1f; }
   .tc-seg.dx { background: #b71c1c; }
   .tc-cap { position: absolute; top: 0; bottom: 0; width: 0; }
-  .tc-total { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 800; color: #555; padding-left: 5px; }
+  .tc-total { position: absolute; top: 50%; transform: translateY(-50%); font-size: 10px; font-weight: 800; color: #555; padding-left: 5px; white-space: nowrap; }
 
   /* 合同档位表 */
   table.tiers { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -146,18 +146,22 @@
 </div>
 
 <!-- 各队工资帽使用情况 -->
-<h2 class="sec">各队工资帽使用情况（国内球员，20 队）</h2>
+<h2 class="sec">各队主要球员与工资帽使用（国内 + 外援，20 队）</h2>
 <p class="usage-note">
-  深红块 = 已确认的<strong>顶薪（D 类）球员</strong>，每人 600 万（公开报道，<strong>可靠</strong>，悬停看名字）；
-  粉色块 = 其余国内球员薪资<strong>（媒体估算）</strong>；灰色 = 距上限 4200 万的剩余空间。蓝/红虚线分别为<strong>下限 1400 万 / 上限 4200 万</strong>，按估算总额排序。
+  单根柱 = 一支球队主要球员薪资构成。
+  <b style="color:#7f0000;">■ 深红</b> = 顶薪（D 类 600 万，<strong>公开报道可靠</strong>）；
+  <b style="color:#d32f2f;">■ 中红</b> = 其他国内主力；
+  <b style="color:#ef9a9a;">■ 浅粉</b> = 其余国内球员；
+  <b style="color:#0d47a1;">■ 蓝色（深→浅）</b> = 外援（按重要性，已折算人民币）。
+  除 600 万顶薪外，个人金额均为<strong>媒体估算</strong>；鼠标悬停看球员名字。按总额排序。
 </p>
 <div class="tc">
   <div class="tc-axis"><div class="tc-spacer"></div><div class="tc-ticks" id="tcTicks"></div></div>
   <div id="tcRows"></div>
 </div>
 <p class="chart-foot">
-  顶薪名单来源：公开报道（2025-26 全联盟共 28 名 D 类顶薪球员；北京/浙江/山西/广厦 4 队用满 3 个名额）。
-  「其余国内薪资」与总额为<strong>媒体估算</strong>，CBA 未公开个人合同，仅供参考。
+  阵容来源：2025-26 公开报道（顶薪名单已逐队核对；周琦→北京、张镇麟→上海、赵睿→北京、余嘉豪赴西班牙等转会已更新）。
+  外援薪资按 ≈7.1 汇率折算人民币，与国内放同一坐标对比。<strong>除 600 万顶薪外，个人薪资 CBA 均未公开，为媒体估算，仅供参考。</strong>
 </p>
 
 <!-- 国内合同档位 -->
@@ -280,40 +284,89 @@ ROWS.forEach(r => {
   bars.appendChild(row);
 });
 
-// ===== 各队工资帽使用情况（国内球员）=====
-// dx = 已确认 D 类顶薪球员（每人 600 万，公开报道）；rest = 其余国内薪资估算（万元）
-const CAP_HI = 4200, CAP_LO = 1400;
+// ===== 各队主要球员与工资帽使用（国内 + 外援）=====
+// dom: [姓名, 估算万元, 档位] 档位 t=顶薪600万(可靠) / m=国内主力(估算)
+// domRest: 其余国内球员合计(估算万元)；imp: [外援姓名, 估算万元RMB] (按≈7.1折算)；impRest: 其余外援
+// 顶薪(t)为公开报道，其余金额为媒体估算。阵容为 2025-26 公开报道。
 const TC_TEAMS = [
-  {nm:"北京",   logo:"beijing",   bd:"#1b5e20", dx:["周琦","陈盈骏","范子铭"], rest:2400},
-  {nm:"浙江广厦", logo:"guangsha", bd:"#1d428a", dx:["胡金秋","孙铭徽","赵岩昊"], rest:2200},
-  {nm:"广东",   logo:"guangdong", bd:"#c8102e", dx:["胡明轩"], rest:3200},
-  {nm:"浙江稠州", logo:"zhejiang", bd:"#e8541c", dx:["吴前","刘泽一","程帅澎"], rest:1900},
-  {nm:"辽宁",   logo:"liaoning",  bd:"#d4321a", dx:["赵继伟","付豪"], rest:2300},
-  {nm:"上海",   logo:"shanghai",  bd:"#1565c0", dx:["王哲林"], rest:2900},
-  {nm:"山西",   logo:"shanxi",    bd:"#c62828", dx:["张宁","葛昭宝","原帅"], rest:1500},
-  {nm:"山东",   logo:"shandong",  bd:"#e53935", dx:["陶汉林","高诗岩"], rest:1900},
-  {nm:"深圳",   logo:"shenzhen",  bd:"#0288d1", dx:["贺希宁"], rest:2400},
-  {nm:"北控",   logo:null,        bd:"#37474f", dx:["邹雨宸","沈梓捷"], rest:1500},
-  {nm:"新疆",   logo:null,        bd:"#c62828", dx:["阿不都沙拉木"], rest:2100},
-  {nm:"天津",   logo:null,        bd:"#ad1457", dx:["林庭谦"], rest:1700},
-  {nm:"青岛",   logo:"qingdao",   bd:"#0277bd", dx:["王奕博"], rest:1700},
-  {nm:"广州",   logo:"guangzhou", bd:"#6a1b9a", dx:["郭艾伦"], rest:1600},
-  {nm:"同曦",   logo:null,        bd:"#283593", dx:["祝铭震"], rest:1450},
-  {nm:"吉林",   logo:null,        bd:"#2e7d32", dx:[], rest:1900},
-  {nm:"福建",   logo:null,        bd:"#00838f", dx:["黄毅超"], rest:1250},
-  {nm:"江苏",   logo:null,        bd:"#1565c0", dx:[], rest:1800},
-  {nm:"宁波",   logo:"ningbo",    bd:"#00838f", dx:["王俊杰"], rest:1150},
-  {nm:"四川",   logo:null,        bd:"#5d4037", dx:[], rest:1500},
+  {nm:"北京",   logo:"beijing",   bd:"#1b5e20",
+    dom:[["周琦",600,"t"],["陈盈骏",600,"t"],["范子铭",600,"t"],["赵睿",450,"m"],["曾凡博",350,"m"],["翟晓川",280,"m"]], domRest:700,
+    imp:[["杰曼",1700],["奥莫特",850],["斯佩尔曼",500]], impRest:0},
+  {nm:"广东",   logo:"guangdong", bd:"#c8102e",
+    dom:[["胡明轩",600,"t"],["徐杰",450,"m"],["崔永熙",400,"m"],["杜润旺",350,"m"],["焦泊乔",300,"m"],["张昊",180,"m"]], domRest:900,
+    imp:[["萨林杰",1700],["贝兹利",800]], impRest:300},
+  {nm:"浙江广厦", logo:"guangsha", bd:"#1d428a",
+    dom:[["胡金秋",600,"t"],["孙铭徽",600,"t"],["赵岩昊",600,"t"],["朱俊龙",350,"m"],["赵嘉仁",220,"m"]], domRest:800,
+    imp:[["布朗",1500],["桑普森",700],["塔克",600]], impRest:0},
+  {nm:"浙江稠州", logo:"zhejiang", bd:"#e8541c",
+    dom:[["吴前",600,"t"],["刘泽一",600,"t"],["程帅澎",600,"t"],["陆文博",300,"m"],["任骏哲",250,"m"]], domRest:650,
+    imp:[["约克",1500],["达米安·琼斯",800],["兰多夫",600]], impRest:0},
+  {nm:"辽宁",   logo:"liaoning",  bd:"#d4321a",
+    dom:[["赵继伟",600,"t"],["付豪",600,"t"],["姜宇星",350,"m"],["李晓旭",300,"m"],["王岚嵚",250,"m"],["邢维皓",220,"m"]], domRest:700,
+    imp:[["莫兰德",1500],["威尔斯",700],["布罗金顿",500]], impRest:0},
+  {nm:"上海",   logo:"shanghai",  bd:"#1565c0",
+    dom:[["王哲林",600,"t"],["张镇麟",550,"m"],["李弘权",300,"m"],["李添荣",300,"m"],["袁堂文",250,"m"],["刘铮",200,"m"]], domRest:700,
+    imp:[["弗格",1500],["古德温",900],["怀特塞德",800]], impRest:0},
+  {nm:"山东",   logo:"shandong",  bd:"#e53935",
+    dom:[["陶汉林",600,"t"],["高诗岩",600,"t"],["陈培东",350,"m"],["陈林坚",350,"m"],["郭凯",200,"m"]], domRest:700,
+    imp:[["克里斯",1400],["鲍威尔",900],["珀塞尔",500]], impRest:0},
+  {nm:"山西",   logo:"shanxi",    bd:"#c62828",
+    dom:[["张宁",600,"t"],["葛昭宝",600,"t"],["原帅",600,"t"],["焦海龙",220,"m"],["刘东",200,"m"]], domRest:500,
+    imp:[["诺威尔",1400],["康迪特",800]], impRest:300},
+  {nm:"北控",   logo:null,        bd:"#37474f",
+    dom:[["邹雨宸",600,"t"],["沈梓捷",600,"t"],["廖三宁",350,"m"],["孟子凯",250,"m"],["张帆",200,"m"]], domRest:500,
+    imp:[["里勒",1500],["小尼尔森",800]], impRest:400},
+  {nm:"新疆",   logo:null,        bd:"#c62828",
+    dom:[["阿不都沙拉木",600,"t"],["齐麟",450,"m"],["吴冠希",350,"m"],["李炎哲",250,"m"],["朱旭航",200,"m"]], domRest:600,
+    imp:[["华莱士",1300],["哈里斯",900],["纳托尔",700]], impRest:0},
+  {nm:"深圳",   logo:"shenzhen",  bd:"#0288d1",
+    dom:[["贺希宁",600,"t"],["容子峰",350,"m"],["顾全",280,"m"],["王浩然",250,"m"],["周鹏",200,"m"],["李慕豪",200,"m"]], domRest:550,
+    imp:[["特奎维恩·史密斯",1400],["约翰逊",800],["马里奇",600]], impRest:0},
+  {nm:"广州",   logo:"guangzhou", bd:"#6a1b9a",
+    dom:[["郭艾伦",600,"t"],["徐昕",350,"m"],["陈国豪",320,"m"],["高宇坤",200,"m"],["刘颜诚",180,"m"]], domRest:450,
+    imp:[["麦考尔",1200],["沃伦",800]], impRest:300},
+  {nm:"同曦",   logo:null,        bd:"#283593",
+    dom:[["祝铭震",600,"t"],["郭昊文",400,"m"],["邬挺嘉",220,"m"],["徐远征",150,"m"]], domRest:450,
+    imp:[["以赛亚·泰勒",700],["所罗门",600],["拉维特",500]], impRest:0},
+  {nm:"天津",   logo:null,        bd:"#ad1457",
+    dom:[["林庭谦",600,"t"],["时德帅",280,"m"],["田雨",150,"m"],["赖俊豪",150,"m"]], domRest:500,
+    imp:[["大卫·詹姆斯",1100]], impRest:800},
+  {nm:"青岛",   logo:"qingdao",   bd:"#0277bd",
+    dom:[["王奕博",600,"t"],["胡小龙",250,"m"],["刘传兴",220,"m"],["张嘉琳",150,"m"]], domRest:500,
+    imp:[["米奇",1500],["韦瑟斯庞",900],["约瑟夫·杨",700]], impRest:0},
+  {nm:"福建",   logo:null,        bd:"#00838f",
+    dom:[["黄毅超",600,"t"],["邹阳",300,"m"],["黎伊扬",200,"m"],["杨曦皓",180,"m"]], domRest:450,
+    imp:[["特莱斯",1100]], impRest:900},
+  {nm:"吉林",   logo:null,        bd:"#2e7d32",
+    dom:[["姜伟泽",450,"m"],["赵率舟",350,"m"],["崔晋铭",250,"m"],["付博文",200,"m"],["孔德高",180,"m"]], domRest:600,
+    imp:[["达拉斯·摩尔",1400]], impRest:1000},
+  {nm:"江苏",   logo:null,        bd:"#1565c0",
+    dom:[["李禄曈",250,"m"],["倪永康",220,"m"],["温佳龙",200,"m"],["言恒栋",150,"m"]], domRest:600,
+    imp:[["贾尔斯",1300],["爱德华兹",900]], impRest:400},
+  {nm:"宁波",   logo:"ningbo",    bd:"#00838f",
+    dom:[["王俊杰",600,"t"],["俞长栋",250,"m"],["戴昊",220,"m"],["鲁吐布拉",200,"m"]], domRest:450,
+    imp:[["辛普森",900],["杰克逊",700],["法尔",600],["泰勒",500]], impRest:0},
+  {nm:"四川",   logo:null,        bd:"#5d4037",
+    dom:[["左朕年",280,"m"],["李金效",250,"m"],["景浩扬",180,"m"],["胡钧淋",150,"m"]], domRest:600,
+    imp:[], impRest:0},
 ];
-TC_TEAMS.forEach(t => t.total = t.dx.length * 600 + t.rest);
+
+const TC_BLUES = ["#0d47a1","#1565c0","#1e88e5","#42a5f5"];
+const TC_REST_BLUE = "#90caf9";
+const tierColor = t => t === "t" ? "#7f0000" : "#d32f2f";
+
+TC_TEAMS.forEach(t => {
+  t.domTotal = t.dom.reduce((s,p) => s + p[1], 0) + t.domRest;
+  t.impTotal = t.imp.reduce((s,p) => s + p[1], 0) + t.impRest;
+  t.total = t.domTotal + t.impTotal;
+});
 TC_TEAMS.sort((a,b) => b.total - a.total);
 
-const TC_MAX = 4400;                    // 轴上限略高于 4200，给标签留位
+const TC_MAX = 8000;                    // 轴上限（万元，含外援折算）
 const tpct = v => (v / TC_MAX * 100);
 
-// 刻度
 const tcTicks = document.getElementById("tcTicks");
-[0,1000,2000,3000,4000].forEach(v => {
+[0,2000,4000,6000,8000].forEach(v => {
   const t = document.createElement("div");
   t.className = "tk"; t.style.left = tpct(v) + "%"; t.textContent = v ? v + "万" : "0";
   tcTicks.appendChild(t);
@@ -334,40 +387,44 @@ TC_TEAMS.forEach((tm, idx) => {
 
   const track = document.createElement("div");
   track.className = "tc-track";
-
-  // 背景网格
-  [1000,2000,3000,4000].forEach(g => {
+  [2000,4000,6000].forEach(g => {
     const vg = document.createElement("div"); vg.className = "tc-cap";
     vg.style.left = tpct(g) + "%"; vg.style.borderLeft = "1px solid #f3f3f3"; track.appendChild(vg);
-  });
-  // 工资帽虚线
-  [{v:CAP_LO,c:"#1565c0"},{v:CAP_HI,c:"#b71c1c"}].forEach(c => {
-    const cl = document.createElement("div"); cl.className = "tc-cap";
-    cl.style.left = tpct(c.v) + "%"; cl.style.borderLeft = "1.5px dashed " + c.c; track.appendChild(cl);
   });
 
   const bar = document.createElement("div");
   bar.className = "tc-bar"; bar.style.width = tpct(tm.total) + "%";
-  // 顶薪段
-  tm.dx.forEach(name => {
-    const s = document.createElement("div"); s.className = "tc-seg dx";
-    s.style.width = (600 / tm.total * 100) + "%";
-    s.title = name + "：顶薪 600 万（D 类，公开报道）";
+
+  const addSeg = (val, color, name, note, textColor) => {
+    const s = document.createElement("div"); s.className = "tc-seg";
+    s.style.width = (val / tm.total * 100) + "%";
+    s.style.background = color;
+    if (textColor) s.style.color = textColor;
+    s.title = name + "：" + note;
     s.textContent = name;
     bar.appendChild(s);
+  };
+
+  // 国内：顶薪/主力（命名）
+  tm.dom.forEach(p => {
+    const [name, sal, tier] = p;
+    addSeg(sal, tierColor(tier), name, tier === "t" ? "顶薪 600 万（D 类，公开报道）" : "国内主力 · 约 " + sal + " 万（估算）");
   });
-  // 其余估算段
-  const r = document.createElement("div"); r.className = "tc-seg rest";
-  r.style.width = (tm.rest / tm.total * 100) + "%";
-  r.title = "其余国内球员薪资（估算）：" + tm.rest + " 万";
-  r.textContent = "其余约" + tm.rest + "万";
-  bar.appendChild(r);
+  // 国内：其余
+  if (tm.domRest > 0) addSeg(tm.domRest, "#ef9a9a", "其余国内", "其余国内球员合计 约 " + tm.domRest + " 万（估算）", "#7a1f1f");
+  // 外援（蓝系，按重要性深→浅）
+  tm.imp.forEach((p, i) => {
+    const [name, sal] = p;
+    addSeg(sal, TC_BLUES[Math.min(i, TC_BLUES.length - 1)], name, "外援 · 约 " + sal + " 万（折算人民币，估算）");
+  });
+  if (tm.impRest > 0) addSeg(tm.impRest, TC_REST_BLUE, "其余外援", "其余外援合计 约 " + tm.impRest + " 万（折算，估算）", "#0d47a1");
+
   track.appendChild(bar);
 
-  // 总额标签
   const tot = document.createElement("div");
   tot.className = "tc-total"; tot.style.left = tpct(tm.total) + "%";
-  tot.textContent = (tm.dx.length ? tm.dx.length + "顶薪·" : "") + "约" + tm.total + "万";
+  tot.title = "国内约 " + tm.domTotal + " 万 + 外援约 " + tm.impTotal + " 万（估算）";
+  tot.textContent = "约" + tm.total + "万";
   track.appendChild(tot);
 
   row.appendChild(track);
